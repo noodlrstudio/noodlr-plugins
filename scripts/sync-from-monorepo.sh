@@ -26,6 +26,9 @@ SYNC_PATHS=(
 # Files that exist only in this repo, inside a synced path. They are never
 # overwritten or deleted by a sync. Paths are relative to the repo root.
 LOCAL_ONLY=(
+  packages/play-api/README.md
+  packages/play-api/tsconfig.build.json
+  packages/play-api/scripts/add-js-extensions.mjs
 )
 
 if [[ $# -lt 1 || $# -gt 2 ]]; then
