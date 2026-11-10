@@ -1,0 +1,7 @@
+# WCLAP hosts call plugin function pointers through the exported table, and
+# grow it to install their own host callbacks.
+[target.wasm32-unknown-unknown]
+rustflags = ["-C", "link-arg=--export-table", "-C", "link-arg=--growable-table"]
+
+[build]
+target = "wasm32-unknown-unknown"

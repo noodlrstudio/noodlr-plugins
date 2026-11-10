@@ -1,0 +1,14 @@
+{
+  "name": "noodlr-web-app-bridge-example",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@noodlr/plugin-sdk": "^0.1.0"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.9"
+  }
+}

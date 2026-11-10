@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "lib": ["DOM", "ES2022"],
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "outDir": "dist",
+    "rootDir": "src",
+    "sourceMap": true,
+    "strict": true,
+    "target": "ES2022"
+  },
+  "include": [
+    "src/index.ts",
+    "src/plugin-json.ts",
+    "src/plugin-midi.ts",
+    "src/web-app.ts"
+  ]
+}
