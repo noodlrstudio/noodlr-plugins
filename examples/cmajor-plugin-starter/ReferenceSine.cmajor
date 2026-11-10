@@ -1,0 +1,49 @@
+graph ReferenceSine [[ main ]]
+{
+    input event std::midi::Message midiIn;
+    output stream float audioOut;
+
+    node
+    {
+        voices = SineVoice[8];
+        voiceAllocator = std::voices::VoiceAllocator (8);
+    }
+
+    connection
+    {
+        midiIn -> std::midi::MPEConverter -> voiceAllocator;
+        voiceAllocator.voiceEventOut -> voices.eventIn;
+        voices -> audioOut;
+    }
+}
+
+graph SineVoice
+{
+    input event (std::notes::NoteOn, std::notes::NoteOff) eventIn;
+    output stream float audioOut;
+
+    node
+    {
+        noteToFrequency = NoteToFrequency;
+        envelope = std::envelopes::FixedASR (0.005f, 0.04f);
+        oscillator = std::oscillators::Sine (float32);
+    }
+
+    connection
+    {
+        eventIn -> noteToFrequency -> oscillator.frequencyIn;
+        eventIn -> envelope.eventIn;
+        (envelope.gainOut * oscillator.out * 0.16f) -> audioOut;
+    }
+}
+
+processor NoteToFrequency
+{
+    input event std::notes::NoteOn eventIn;
+    output event float32 frequencyOut;
+
+    event eventIn (std::notes::NoteOn note)
+    {
+        frequencyOut <- std::notes::noteToFrequency (note.pitch);
+    }
+}

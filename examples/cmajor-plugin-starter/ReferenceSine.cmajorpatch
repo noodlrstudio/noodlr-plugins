@@ -1,0 +1,11 @@
+{
+  "CmajorVersion": 1,
+  "ID": "xyz.noodlr.examples.reference-sine",
+  "version": "1.0.0",
+  "name": "Reference Sine",
+  "description": "Minimal CMajor instrument for the Noodlr curated plugin route.",
+  "manufacturer": "Noodlr",
+  "category": "instrument",
+  "isInstrument": true,
+  "source": "ReferenceSine.cmajor"
+}

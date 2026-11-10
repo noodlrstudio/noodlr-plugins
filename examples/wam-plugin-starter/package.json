@@ -1,0 +1,16 @@
+{
+  "name": "noodlr-wam-plugin-starter",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@webaudiomodules/api": "2.0.0-alpha.6",
+    "@webaudiomodules/sdk": "0.0.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
