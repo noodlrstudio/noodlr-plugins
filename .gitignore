@@ -1,0 +1,28 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Build output
+dist
+target
+.svelte-kit
+*.tsbuildinfo
+
+# Coverage
+coverage
+*.lcov
+
+# Output of 'npm pack'
+*.tgz
+
+# Local environment
+.env
+.env.*.local
+.env.local

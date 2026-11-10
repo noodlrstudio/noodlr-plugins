@@ -1,0 +1,5 @@
+**/.DS_Store
+**/.svelte-kit
+**/dist
+**/target
+package-lock.json
