@@ -134,6 +134,27 @@ describe("scaffold", () => {
     expect(checkCapabilities(declared!.capabilities, files).ok).toBe(true);
   });
 
+  it("includes a build for the Mac app's local plugins folder", () => {
+    const files = scaffoldFiles({
+      route: "play-node",
+      id: "com.example.drum-grid",
+      name: "Drum Grid",
+    });
+    const file = (path: string) =>
+      files.find((candidate) => candidate.path === path)?.content ?? "";
+    expect(JSON.parse(file("package.json")).scripts["build:local"]).toBe(
+      "vite build --config vite.local.config.ts",
+    );
+    expect(file("vite.local.config.ts")).toContain(
+      'const id = "com.example.drum-grid"',
+    );
+    expect(file("src/local-plugin.ts")).toContain(
+      "const { view, ...definition } = drumGrid",
+    );
+    expect(file(".gitignore")).toContain("dist-local");
+    expect(file("README.md")).toContain("Developer › Open Node Lab");
+  });
+
   it("creates a web app bridge project", () => {
     const files = scaffoldFiles({
       route: "web-app",

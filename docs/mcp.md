@@ -141,6 +141,9 @@ prompt create-play-node
 4. Add tests with createMockPlayNodeContext.
 5. Run validate_play_node, check_capabilities and lint_theme, then the
    project's tests, and fix everything they report.
+6. Run `npm run build:local` in the project to build it for the Noodlr Mac
+   app. It writes dist-local/com.example.compressor/. Then tell the developer
+   how to try it: (the steps in "Run it in the Mac app" below)
 ```
 
 ### 2. Read the reference
@@ -372,7 +375,35 @@ Test Files  1 passed (1)
      Tests  6 passed (6)
 ```
 
-### 9. Prepare for review
+### 9. Run it in the Mac app
+
+Every Play node scaffold includes a build for the Noodlr Mac app's local
+plugins folder:
+
+```text
+$ npm run build:local
+dist-local/com.example.compressor/index.js  241.55 kB │ gzip: 62.78 kB
+```
+
+`dist-local/com.example.compressor/` holds one JavaScript file (with its own
+Svelte runtime and styles) and a `noodlr-plugin.json` descriptor. To run it:
+
+1. Choose **Developer › Show Plugins Folder** and copy
+   `dist-local/com.example.compressor` into it. That folder is
+   `~/Library/Containers/com.5of12.noodlr/Data/Library/Application Support/Noodlr/Plugins`,
+   or `~/Library/Application Support/Noodlr/Plugins` for a development build.
+2. Turn on **Developer › Load Local Plugins**.
+3. Choose **Developer › Open Node Lab**. The node is put on the stage and
+   listed under **Local plugins**. If it can't load, the reason is shown there.
+
+Local plugins are unreviewed and run with the board's access, so they only
+load in Node Lab. Rebuild and reopen Node Lab after each change.
+
+The bundle's default export is `{ definition, mount }`: the definition without
+its view, and a function that mounts the view into an element the host
+provides. `src/local-plugin.ts` in the scaffold does this for you.
+
+### 10. Prepare for review
 
 The `prepare-for-review` prompt runs every check again and lists what a review
 pull request still needs, such as a licence file. See

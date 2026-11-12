@@ -24,7 +24,11 @@ import {
 } from "./knowledge.js";
 import { readSourceFiles } from "./source-files.js";
 import { lintTheme } from "./theme-lint.js";
-import { scaffoldFiles, scaffoldIssues } from "./templates.js";
+import {
+  localPluginSteps,
+  scaffoldFiles,
+  scaffoldIssues,
+} from "./templates.js";
 
 export const SERVER_NAME = "noodlr";
 export const SERVER_VERSION = "0.1.0";
@@ -427,7 +431,10 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
 2. Call scaffold_plugin with route "play-node"${id ? ` and id "${id}"` : ""}.
 3. Implement the node. Use @noodlr/ui controls and --noodlr-* tokens only. Declare exactly the capabilities you use.
 4. Add tests with createMockPlayNodeContext.
-5. Run validate_play_node, check_capabilities and lint_theme, then the project's tests, and fix everything they report.`,
+5. Run validate_play_node, check_capabilities and lint_theme, then the project's tests, and fix everything they report.
+6. Run \`npm run build:local\` in the project to build it for the Noodlr Mac app. It writes dist-local/${id ?? "<id>"}/. Then tell the developer how to try it:
+
+${localPluginSteps(id ?? "<id>")}`,
           },
         },
       ],

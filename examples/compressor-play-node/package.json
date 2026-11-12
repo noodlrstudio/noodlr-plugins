@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "test": "vitest run",
-    "validate": "svelte-check --tsconfig ./tsconfig.json && vitest run"
+    "validate": "svelte-check --tsconfig ./tsconfig.json && vitest run",
+    "build:local": "vite build --config vite.local.config.ts"
   },
   "dependencies": {
     "@noodlr/play-api": "^0.3.0",

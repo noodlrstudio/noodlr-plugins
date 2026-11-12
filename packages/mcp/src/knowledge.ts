@@ -157,7 +157,11 @@ MIDI and JSON only; it never carries audio across the iframe.
    \`check_capabilities\` and \`lint_theme\` until they pass.
 5. Run the project's own tests (\`npm test\`). Use
    \`createMockPlayNodeContext\` from \`@noodlr/play-api/testing\` in tests.
-6. Read \`noodlr://docs/submitting\` before opening a pull request.
+6. To try a Play node in the Noodlr Mac app, run \`npm run build:local\` and
+   copy \`dist-local/<id>\` into the folder that **Developer › Show Plugins
+   Folder** opens. It appears in **Developer › Open Node Lab** under
+   **Local plugins**.
+7. Read \`noodlr://docs/submitting\` before opening a pull request.
 
 The Play API is at version \`0\`; minor releases may break things.
 `;

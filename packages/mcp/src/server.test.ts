@@ -53,6 +53,20 @@ describe("noodlr MCP server", () => {
     expect(prompts).toContain("create-play-node");
   });
 
+  it("ends create-play-node with the Mac app local build", async () => {
+    const prompt = await client.getPrompt({
+      name: "create-play-node",
+      arguments: { idea: "a compressor", id: "com.example.compressor" },
+    });
+    const [message] = prompt.messages as Array<{
+      content: { text: string };
+    }>;
+    expect(message.content.text).toContain("npm run build:local");
+    expect(message.content.text).toContain("dist-local/com.example.compressor");
+    expect(message.content.text).toContain("Developer › Show Plugins Folder");
+    expect(message.content.text).toContain("Developer › Open Node Lab");
+  });
+
   it("serves every resource", async () => {
     for (const resource of (await client.listResources()).resources) {
       const read = await client.readResource({ uri: resource.uri });

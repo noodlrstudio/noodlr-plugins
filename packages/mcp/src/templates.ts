@@ -80,6 +80,7 @@ function playNodeFiles(options: ScaffoldOptions): ScaffoldFile[] {
           dev: "vite",
           test: "vitest run",
           validate: "svelte-check --tsconfig ./tsconfig.json && vitest run",
+          "build:local": "vite build --config vite.local.config.ts",
         },
         dependencies: {
           "@noodlr/play-api": "^0.3.0",
@@ -120,6 +121,33 @@ export default defineConfig({
   plugins: [svelte()],
 });
 `,
+    },
+    {
+      path: "vite.local.config.ts",
+      content: localBuildConfig(options),
+    },
+    {
+      path: "src/local-plugin.ts",
+      content: `// Entry for the Noodlr Mac app's local plugins folder (npm run build:local).
+// The bundle carries its own Svelte runtime, so it mounts its own view into
+// the element the host gives it.
+import { mount, unmount } from "svelte";
+import { ${exportName} } from "./index";
+
+const { view, ...definition } = ${exportName};
+
+export default {
+  definition,
+  mount(target: HTMLElement, props: Record<string, unknown>) {
+    const app = mount(view, { target, props: props as never });
+    return { destroy: () => unmount(app) };
+  },
+};
+`,
+    },
+    {
+      path: ".gitignore",
+      content: "node_modules\ndist\ndist-local\n",
     },
     {
       path: "src/index.ts",
@@ -248,11 +276,89 @@ npm install
 npm run validate
 \`\`\`
 
+## Run it in the Noodlr Mac app
+
+\`\`\`sh
+npm run build:local
+\`\`\`
+
+${localPluginSteps(options.id)}
+
 Play nodes are reviewed before they ship. See ${REPOSITORY_URL} for the
 contract and the submission process.
 `,
     },
   ];
+}
+
+/** The plugins folder of the App Store build and of a development build. */
+export const LOCAL_PLUGIN_FOLDERS = {
+  app: "~/Library/Containers/com.5of12.noodlr/Data/Library/Application Support/Noodlr/Plugins",
+  development: "~/Library/Application Support/Noodlr/Plugins",
+} as const;
+
+/** How to load a `build:local` bundle into the Mac app, for docs and prompts. */
+export function localPluginSteps(id: string) {
+  return `This writes \`dist-local/${id}/\`: one JavaScript file and a
+\`noodlr-plugin.json\`. To run it in the Noodlr Mac app:
+
+1. Choose **Developer › Show Plugins Folder** and copy \`dist-local/${id}\`
+   into it. That folder is \`${LOCAL_PLUGIN_FOLDERS.app}\`, or
+   \`${LOCAL_PLUGIN_FOLDERS.development}\` for a development build.
+2. Turn on **Developer › Load Local Plugins**.
+3. Choose **Developer › Open Node Lab**. The node is put on the stage and
+   listed under **Local plugins**. If it can't load, the reason is shown there.
+
+Local plugins are unreviewed and run with the board's access, so they only
+load in Node Lab. Rebuild and reopen Node Lab after each change.`;
+}
+
+function localBuildConfig(options: ScaffoldOptions) {
+  return `// npm run build:local writes dist-local/${options.id}/: one ES module plus
+// noodlr-plugin.json, ready to copy into the Noodlr Mac app's plugins folder.
+import { readFileSync, writeFileSync } from "node:fs";
+import { svelte } from "@sveltejs/vite-plugin-svelte";
+import { defineConfig } from "vite";
+
+// Must match manifest.id in src/index.ts; Noodlr refuses a mismatch.
+const id = ${JSON.stringify(options.id)};
+const outDir = \`dist-local/\${id}\`;
+const { version } = JSON.parse(readFileSync("package.json", "utf8"));
+
+export default defineConfig({
+  plugins: [
+    // Styles go into the JavaScript so the plugin is a single file.
+    svelte({ compilerOptions: { css: "injected" } }),
+    {
+      name: "noodlr-plugin-descriptor",
+      closeBundle() {
+        const descriptor = {
+          schemaVersion: 1,
+          id,
+          name: ${JSON.stringify(options.name)},
+          version,
+          kind: "play-node",
+          entry: "index.js",
+        };
+        writeFileSync(
+          \`\${outDir}/noodlr-plugin.json\`,
+          \`\${JSON.stringify(descriptor, null, 2)}\\n\`,
+        );
+      },
+    },
+  ],
+  define: { "process.env.NODE_ENV": JSON.stringify("production") },
+  build: {
+    outDir,
+    emptyOutDir: true,
+    lib: {
+      entry: "src/local-plugin.ts",
+      formats: ["es"],
+      fileName: () => "index.js",
+    },
+  },
+});
+`;
 }
 
 function webAppFiles(options: ScaffoldOptions): ScaffoldFile[] {
