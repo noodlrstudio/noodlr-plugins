@@ -1,0 +1,43 @@
+{
+  "name": "@noodlr/mcp",
+  "version": "0.1.0",
+  "description": "A Model Context Protocol server that gives coding agents the Noodlr plugin contracts, schemas, UI kit and checks.",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "noodlr-mcp": "./dist/bin.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "generate:ui": "node scripts/generate-ui-catalogue.mjs",
+    "build": "npm run generate:ui && rm -rf dist && tsc --project tsconfig.build.json && chmod +x dist/bin.js",
+    "prepack": "npm run build && npm test",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "@noodlr/play-api": "^0.3.0",
+    "@noodlr/plugin-sdk": "^0.1.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.2",
+    "vitest": "^4.1.9"
+  }
+}
