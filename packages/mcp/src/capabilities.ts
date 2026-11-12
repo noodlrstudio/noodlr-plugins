@@ -1,7 +1,7 @@
 import {
   PLAY_NODE_CAPABILITIES,
   type PlayNodeCapability,
-} from "@noodlr/play-api";
+} from "@noodlrstudio/play-api";
 import type { SourceFile } from "./source-files.js";
 
 interface UsagePattern {

@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onDestroy } from "svelte";
-  import type { PlayJsonObject, PlayNodeViewProps } from "@noodlr/play-api";
-  import { Button, Knob, LevelMeter, NodeSurface } from "@noodlr/ui/play-node";
+  import type { PlayJsonObject, PlayNodeViewProps } from "@noodlrstudio/play-api";
+  import { Button, Knob, LevelMeter, NodeSurface } from "@noodlrstudio/ui/play-node";
   import {
     DEFAULT_SETTINGS,
     settingsFromState,

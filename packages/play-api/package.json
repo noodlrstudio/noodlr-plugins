@@ -1,5 +1,5 @@
 {
-  "name": "@noodlr/play-api",
+  "name": "@noodlrstudio/play-api",
   "version": "0.3.0",
   "description": "The Noodlr Play node contract: manifest, capabilities, state fields, host context types, validation and a mock context for tests.",
   "license": "MIT",

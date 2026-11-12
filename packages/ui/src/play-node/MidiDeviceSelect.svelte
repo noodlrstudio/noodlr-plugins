@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PlayMidiDeviceInfo } from "@noodlr/play-api";
+  import type { PlayMidiDeviceInfo } from "@noodlrstudio/play-api";
 
   export let devices: readonly PlayMidiDeviceInfo[] = [];
   export let selectedId = "";

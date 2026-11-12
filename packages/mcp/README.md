@@ -1,4 +1,4 @@
-# @noodlr/mcp
+# @noodlrstudio/mcp
 
 A [Model Context Protocol](https://modelcontextprotocol.io) server for building
 Noodlr Board plugins with a coding agent. It gives the agent the plugin
@@ -11,23 +11,23 @@ Full guide, with a walkthrough that builds a compressor:
 [Building plugins with a coding agent](../../docs/mcp.md).
 
 > Not on npm yet. Until it is, build from this repository and run
-> `node packages/mcp/dist/bin.js` instead of `npx -y @noodlr/mcp`.
+> `node packages/mcp/dist/bin.js` instead of `npx -y @noodlrstudio/mcp`.
 
 ## Set up
 
 Claude Code:
 
 ```sh
-claude mcp add noodlr -- npx -y @noodlr/mcp
+claude mcp add noodlr -- npx -y @noodlrstudio/mcp
 ```
 
-Any other MCP client: run `npx -y @noodlr/mcp` as a stdio server. For example,
+Any other MCP client: run `npx -y @noodlrstudio/mcp` as a stdio server. For example,
 in a project `.mcp.json`:
 
 ```json
 {
   "mcpServers": {
-    "noodlr": { "command": "npx", "args": ["-y", "@noodlr/mcp"] }
+    "noodlr": { "command": "npx", "args": ["-y", "@noodlrstudio/mcp"] }
   }
 }
 ```
@@ -39,18 +39,18 @@ in, normally your project.
 
 ### Resources
 
-| URI                                      | Contents                                           |
-| ---------------------------------------- | -------------------------------------------------- |
-| `noodlr://docs/overview`                 | Plugin routes, when to use each, and the workflow  |
-| `noodlr://docs/design-rules`             | Theming, capability, state and lifecycle rules     |
-| `noodlr://docs/capabilities`             | Every capability and the context API behind it     |
-| `noodlr://docs/web-app-bridge`           | The web app bridge and the rules the host enforces |
-| `noodlr://docs/submitting`               | What a review pull request needs                   |
-| `noodlr://ui/components`                 | `@noodlr/ui` Play node controls and their props    |
-| `noodlr://theme/tokens`                  | The `--noodlr-*` tokens for Light and Dark         |
-| `noodlr://schemas/play-node/manifest`    | Play node manifest JSON Schema                     |
-| `noodlr://schemas/play-node/definition`  | Play node definition JSON Schema                   |
-| `noodlr://schemas/audio-plugin/manifest` | WAM 2 / Cmajor / WCLAP manifest JSON Schema        |
+| URI                                      | Contents                                              |
+| ---------------------------------------- | ----------------------------------------------------- |
+| `noodlr://docs/overview`                 | Plugin routes, when to use each, and the workflow     |
+| `noodlr://docs/design-rules`             | Theming, capability, state and lifecycle rules        |
+| `noodlr://docs/capabilities`             | Every capability and the context API behind it        |
+| `noodlr://docs/web-app-bridge`           | The web app bridge and the rules the host enforces    |
+| `noodlr://docs/submitting`               | What a review pull request needs                      |
+| `noodlr://ui/components`                 | `@noodlrstudio/ui` Play node controls and their props |
+| `noodlr://theme/tokens`                  | The `--noodlr-*` tokens for Light and Dark            |
+| `noodlr://schemas/play-node/manifest`    | Play node manifest JSON Schema                        |
+| `noodlr://schemas/play-node/definition`  | Play node definition JSON Schema                      |
+| `noodlr://schemas/audio-plugin/manifest` | WAM 2 / Cmajor / WCLAP manifest JSON Schema           |
 
 ### Tools
 

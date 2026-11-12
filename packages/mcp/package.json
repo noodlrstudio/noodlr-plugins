@@ -1,7 +1,8 @@
 {
-  "name": "@noodlr/mcp",
+  "name": "@noodlrstudio/mcp",
   "version": "0.1.0",
   "description": "A Model Context Protocol server that gives coding agents the Noodlr plugin contracts, schemas, UI kit and checks.",
+  "mcpName": "io.github.noodlrstudio/noodlr",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,
@@ -31,8 +32,8 @@
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.32.2",
-    "@noodlr/play-api": "^0.3.0",
-    "@noodlr/plugin-sdk": "^0.1.0",
+    "@noodlrstudio/play-api": "^0.3.0",
+    "@noodlrstudio/plugin-sdk": "^0.1.0",
     "zod": "^4.1.12"
   },
   "devDependencies": {

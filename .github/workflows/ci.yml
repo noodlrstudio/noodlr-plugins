@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Test
+        run: npm test
+
+      - name: Type-check and format
+        run: npm run check
+
+      - name: Validate Play node examples
+        run: |
+          for example in play-node-starter compressor-play-node; do
+            npm run validate --workspace "examples/$example"
+          done
+
+      - name: Generated files are up to date
+        run: |
+          npm run generate:schemas --workspace @noodlrstudio/play-api
+          git diff --exit-code -- schemas packages/mcp/src/generated

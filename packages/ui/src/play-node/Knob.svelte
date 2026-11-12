@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PlayMidiControlBinding } from "@noodlr/play-api";
+  import type { PlayMidiControlBinding } from "@noodlrstudio/play-api";
   import { bindMidiControl } from "./midi-control";
 
   export let label: string;

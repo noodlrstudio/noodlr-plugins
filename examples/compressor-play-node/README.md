@@ -4,14 +4,14 @@ A stereo compressor Play node: audio in, audio out, six knobs, a bypass button
 and a gain-reduction meter. All settings are shared, so everyone in a Live
 Collaboration Space hears the same compressor.
 
-It was built with a coding agent through [`@noodlr/mcp`](../../packages/mcp).
+It was built with a coding agent through [`@noodlrstudio/mcp`](../../packages/mcp).
 The walkthrough in [docs/mcp.md](../../docs/mcp.md) shows each step.
 
 | File                           | What it does                                                                                 |
 | ------------------------------ | -------------------------------------------------------------------------------------------- |
 | `src/index.ts`                 | The `definePlayNode` definition: manifest, state fields, audio ports and `setup`             |
 | `src/compressor-controller.ts` | Builds the Web Audio graph (`DynamicsCompressorNode`, makeup gain, bypass) and follows state |
-| `src/Compressor.svelte`        | The view, using `@noodlr/ui` controls and `--noodlr-*` tokens only                           |
+| `src/Compressor.svelte`        | The view, using `@noodlrstudio/ui` controls and `--noodlr-*` tokens only                     |
 | `src/index.test.ts`            | Tests, with a fake `AudioContext` injected into the controller                               |
 
 ```sh

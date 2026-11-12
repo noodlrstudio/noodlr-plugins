@@ -1,8 +1,8 @@
 {
-  "name": "@noodlr/plugin-sdk",
+  "name": "@noodlrstudio/plugin-sdk",
   "version": "0.1.0",
   "description": "Browser integration contracts for Noodlr web apps and audio plugins.",
-  "license": "AGPL-3.0-or-later",
+  "license": "MIT",
   "type": "module",
   "sideEffects": false,
   "main": "./dist/index.js",

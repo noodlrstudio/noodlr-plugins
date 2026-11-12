@@ -1,4 +1,4 @@
-import type { PlayJsonObject, PlayNodeContext } from "@noodlr/play-api";
+import type { PlayJsonObject, PlayNodeContext } from "@noodlrstudio/play-api";
 
 export interface CompressorSettings {
   /** dB, -60 to 0. */

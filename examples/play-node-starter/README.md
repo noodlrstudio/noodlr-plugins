@@ -19,7 +19,7 @@ Noodlr's Play room has a Light and a Dark theme, and users switch between them
 with the Sun/Moon toggle in the board header. The starter node supports both
 without any theme code:
 
-- Controls from `@noodlr/ui/play-node` (`NodeSurface`, `Button`, `Knob` and the
+- Controls from `@noodlrstudio/ui/play-node` (`NodeSurface`, `Button`, `Knob` and the
   rest) follow the host theme automatically.
 - Style your own elements with the `--noodlr-*` tokens, for example
   `color: var(--noodlr-text-secondary)`. Never write colour literals such as

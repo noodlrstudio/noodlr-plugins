@@ -1,4 +1,4 @@
-# @noodlr/play-api
+# @noodlrstudio/play-api
 
 The contract for [Noodlr Board](https://noodlr.xyz) Play nodes: the manifest,
 capabilities, state field definitions, host context types, validation, and a
@@ -10,7 +10,7 @@ mock context for tests.
 ## Install
 
 ```sh
-npm install @noodlr/play-api
+npm install @noodlrstudio/play-api
 ```
 
 `svelte` 5 is a peer dependency. It is used for types only (a node's `view` is
@@ -19,7 +19,7 @@ a Svelte component); this package ships no Svelte runtime code.
 ## Define a node
 
 ```ts
-import { definePlayNode } from "@noodlr/play-api";
+import { definePlayNode } from "@noodlrstudio/play-api";
 import StarterNode from "./StarterNode.svelte";
 
 export const starterNode = definePlayNode({
@@ -63,8 +63,8 @@ logic can be tested without Noodlr Board. Import it from the `./testing`
 entry point to keep it out of production bundles:
 
 ```ts
-import { createPlayNodeSharedDefaults } from "@noodlr/play-api";
-import { createMockPlayNodeContext } from "@noodlr/play-api/testing";
+import { createPlayNodeSharedDefaults } from "@noodlrstudio/play-api";
+import { createMockPlayNodeContext } from "@noodlrstudio/play-api/testing";
 import { starterNode } from "./index";
 
 const mock = createMockPlayNodeContext(
@@ -77,7 +77,7 @@ mock.context.transport.snapshot().bpm; // 96
 ```
 
 The mock is also re-exported from the package root, so existing imports keep
-working, but prefer `@noodlr/play-api/testing` in new code.
+working, but prefer `@noodlrstudio/play-api/testing` in new code.
 
 ## What is in the package
 
@@ -88,7 +88,7 @@ working, but prefer `@noodlr/play-api/testing` in new code.
 | State              | `createPlayNodeDefaults`, `createPlayNodeSharedDefaults`, `migratePlayNodeState`                                              |
 | Host context types | `PlayNodeContext`, `PlayNodeViewProps` and the transport, clock, MIDI, mixer, asset and appearance API types                  |
 | Appearance         | Theme tokens and helpers for drawing on a `<canvas>`                                                                          |
-| Testing            | `createMockPlayNodeContext` (`@noodlr/play-api/testing`)                                                                      |
+| Testing            | `createMockPlayNodeContext` (`@noodlrstudio/play-api/testing`)                                                                |
 
 JSON Schemas for manifests and definitions are in `schemas/play-api/v0` in the
 noodlr-plugins repository.
