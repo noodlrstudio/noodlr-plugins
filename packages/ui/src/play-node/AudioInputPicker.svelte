@@ -3,7 +3,7 @@
     PlayMicrophoneChannelSelection,
     PlayMicrophoneDeviceInfo,
     PlayMicrophoneInputMode,
-  } from "@noodlr/play-api";
+  } from "@noodlrstudio/play-api";
 
   export let devices: readonly PlayMicrophoneDeviceInfo[] = [];
   export let deviceId = "";

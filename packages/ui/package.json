@@ -1,5 +1,5 @@
 {
-  "name": "@noodlr/ui",
+  "name": "@noodlrstudio/ui",
   "version": "0.1.0",
   "description": "Svelte controls for Noodlr Play nodes that follow the host Light and Dark themes, and the --noodlr-* theme tokens.",
   "license": "MIT",
@@ -34,7 +34,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "@noodlr/play-api": "^0.3.0"
+    "@noodlrstudio/play-api": "^0.3.0"
   },
   "peerDependencies": {
     "svelte": "^5.0.0"

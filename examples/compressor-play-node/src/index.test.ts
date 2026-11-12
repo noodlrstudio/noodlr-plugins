@@ -4,7 +4,7 @@ import {
   createMockPlayNodeContext,
   createPlayNodeSharedDefaults,
   type PlayJsonObject,
-} from "@noodlr/play-api";
+} from "@noodlrstudio/play-api";
 import { compressor } from "./index";
 import {
   DEFAULT_SETTINGS,

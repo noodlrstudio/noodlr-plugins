@@ -1,4 +1,4 @@
-import { definePlayNode } from "@noodlr/play-api";
+import { definePlayNode } from "@noodlrstudio/play-api";
 import StarterNode from "./StarterNode.svelte";
 
 export const starterNode = definePlayNode({

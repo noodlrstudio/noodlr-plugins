@@ -16,7 +16,7 @@ application itself is developed separately and is not open source.
 
 | Route              | What you write                                                 | What you get                                                                                  | Review needed |
 | ------------------ | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------- | ------------- |
-| **Web app bridge** | Any web app you host, plus `@noodlr/plugin-sdk`                | MIDI in and out, runtime state, and state saved with the board, inside an iframe node         | No            |
+| **Web app bridge** | Any web app you host, plus `@noodlrstudio/plugin-sdk`          | MIDI in and out, runtime state, and state saved with the board, inside an iframe node         | No            |
 | **Play node**      | A Svelte 5 component and a `definePlayNode` definition         | The full host API: audio and MIDI ports, transport, shared collaborative state, assets, mixer | Yes           |
 | **Audio plugin**   | A WAM 2, Cmajor or WCLAP (CLAP compiled to WebAssembly) bundle | Real graph audio and MIDI inside Noodlr's AudioContext                                        | Yes           |
 
@@ -24,36 +24,36 @@ Not sure which to pick? Start with the web app bridge. It needs no review and
 works with a site you already have. Move to a Play node when you need audio
 ports, transport sync or shared state.
 
-Building with a coding agent? Connect it to [`@noodlr/mcp`](packages/mcp) and
+Building with a coding agent? Connect it to [`@noodlrstudio/mcp`](packages/mcp) and
 read [Building plugins with a coding agent](docs/mcp.md).
 
 ## Packages
 
-| Package                                     | Purpose                                                                                                                                |
-| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| [`@noodlr/play-api`](packages/play-api)     | The Play node contract: manifest, capabilities, state fields, host context types, validation and a mock context for tests              |
-| [`@noodlr/ui`](packages/ui)                 | Svelte controls that match the host (`NodeSurface`, `Knob`, `Pad`, `PianoKeyboard`, meters, pickers) and the `--noodlr-*` theme tokens |
-| [`@noodlr/plugin-sdk`](packages/plugin-sdk) | Framework-neutral bridge for independently hosted web apps                                                                             |
-| [`@noodlr/mcp`](packages/mcp)               | An MCP server that gives coding agents the contracts, schemas, UI kit and review checks                                                |
+| Package                                           | Purpose                                                                                                                                |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| [`@noodlrstudio/play-api`](packages/play-api)     | The Play node contract: manifest, capabilities, state fields, host context types, validation and a mock context for tests              |
+| [`@noodlrstudio/ui`](packages/ui)                 | Svelte controls that match the host (`NodeSurface`, `Knob`, `Pad`, `PianoKeyboard`, meters, pickers) and the `--noodlr-*` theme tokens |
+| [`@noodlrstudio/plugin-sdk`](packages/plugin-sdk) | Framework-neutral bridge for independently hosted web apps                                                                             |
+| [`@noodlrstudio/mcp`](packages/mcp)               | An MCP server that gives coding agents the contracts, schemas, UI kit and review checks                                                |
 
 JSON Schemas for Play node manifests and definitions are in
 [`schemas/play-api/v0`](schemas/play-api/v0).
 
 ## Starters
 
-| Starter                                                            | Use it for                                           |
-| ------------------------------------------------------------------ | ---------------------------------------------------- |
-| [`examples/play-node-starter`](examples/play-node-starter)         | A Play node with shared state, theming and transport |
-| [`examples/compressor-play-node`](examples/compressor-play-node)   | An audio effect Play node built with `@noodlr/mcp`   |
-| [`examples/web-app-plugin-bridge`](examples/web-app-plugin-bridge) | Connecting a hosted web app over the bridge          |
-| [`examples/wam-plugin-starter`](examples/wam-plugin-starter)       | A minimal WAM 2 gain effect                          |
-| [`examples/cmajor-plugin-starter`](examples/cmajor-plugin-starter) | A Cmajor patch exported for Web Audio                |
-| [`wclap-plugins/`](wclap-plugins)                                  | Reference CLAP plugins in Rust, built to WebAssembly |
+| Starter                                                            | Use it for                                               |
+| ------------------------------------------------------------------ | -------------------------------------------------------- |
+| [`examples/play-node-starter`](examples/play-node-starter)         | A Play node with shared state, theming and transport     |
+| [`examples/compressor-play-node`](examples/compressor-play-node)   | An audio effect Play node built with `@noodlrstudio/mcp` |
+| [`examples/web-app-plugin-bridge`](examples/web-app-plugin-bridge) | Connecting a hosted web app over the bridge              |
+| [`examples/wam-plugin-starter`](examples/wam-plugin-starter)       | A minimal WAM 2 gain effect                              |
+| [`examples/cmajor-plugin-starter`](examples/cmajor-plugin-starter) | A Cmajor patch exported for Web Audio                    |
+| [`wclap-plugins/`](wclap-plugins)                                  | Reference CLAP plugins in Rust, built to WebAssembly     |
 
 ## Quick look: a Play node
 
 ```ts
-import { definePlayNode } from "@noodlr/play-api";
+import { definePlayNode } from "@noodlrstudio/play-api";
 import StarterNode from "./StarterNode.svelte";
 
 export const starterNode = definePlayNode({
@@ -91,7 +91,7 @@ node has declared, and reviewers check the declaration against the code.
 ## Quick look: a web app
 
 ```ts
-import { createNoodlrWebAppBridge } from "@noodlr/plugin-sdk/web-app";
+import { createNoodlrWebAppBridge } from "@noodlrstudio/plugin-sdk/web-app";
 
 const bridge = createNoodlrWebAppBridge({
   manifest: {
@@ -114,7 +114,7 @@ iframe boundary; use an audio plugin format for that.
 
 ## Design rules for Play nodes
 
-- Use controls from `@noodlr/ui/play-node`. They follow the host's Light and
+- Use controls from `@noodlrstudio/ui/play-node`. They follow the host's Light and
   Dark themes automatically.
 - Style your own elements with `--noodlr-*` tokens. Do not write colour
   literals; they will be wrong in one of the two themes.

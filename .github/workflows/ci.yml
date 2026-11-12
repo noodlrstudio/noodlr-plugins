@@ -39,5 +39,5 @@ jobs:
 
       - name: Generated files are up to date
         run: |
-          npm run generate:schemas --workspace @noodlr/play-api
+          npm run generate:schemas --workspace @noodlrstudio/play-api
           git diff --exit-code -- schemas packages/mcp/src/generated

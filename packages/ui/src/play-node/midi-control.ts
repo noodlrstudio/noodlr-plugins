@@ -1,4 +1,4 @@
-import type { PlayMidiControlBinding } from "@noodlr/play-api";
+import type { PlayMidiControlBinding } from "@noodlrstudio/play-api";
 
 export function bindMidiControl(
   node: HTMLElement,

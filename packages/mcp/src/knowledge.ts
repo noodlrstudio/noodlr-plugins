@@ -4,7 +4,7 @@ import {
   PLAY_NODE_CAPABILITIES,
   PLAY_NODE_ICON_TOKENS,
   type PlayNodeCapability,
-} from "@noodlr/play-api";
+} from "@noodlrstudio/play-api";
 import { UI_COMPONENTS } from "./generated/ui-catalogue.js";
 
 export const REPOSITORY_URL = "https://github.com/noodlrstudio/noodlr-plugins";
@@ -139,8 +139,8 @@ Source, starters and docs: ${REPOSITORY_URL}
 
 | Route | You write | You get | Review |
 | --- | --- | --- | --- |
-| Web app bridge | Any hosted web app plus \`@noodlr/plugin-sdk/web-app\` | MIDI in and out, runtime state, JSON state saved with the board, inside an iframe node | No |
-| Play node | A Svelte 5 component plus a \`definePlayNode\` definition from \`@noodlr/play-api\` | The full host API: audio and MIDI ports, transport, shared collaborative state, assets, mixer | Yes |
+| Web app bridge | Any hosted web app plus \`@noodlrstudio/plugin-sdk/web-app\` | MIDI in and out, runtime state, JSON state saved with the board, inside an iframe node | No |
+| Play node | A Svelte 5 component plus a \`definePlayNode\` definition from \`@noodlrstudio/play-api\` | The full host API: audio and MIDI ports, transport, shared collaborative state, assets, mixer | Yes |
 | Audio plugin | A WAM 2, Cmajor or WCLAP (CLAP built to WebAssembly) bundle | Real graph audio and MIDI inside Noodlr's AudioContext | Yes |
 
 Start with the web app bridge if you already have a site. Move to a Play node
@@ -156,7 +156,7 @@ MIDI and JSON only; it never carries audio across the iframe.
 4. Call \`validate_play_node\` (or the web app or audio plugin validator),
    \`check_capabilities\` and \`lint_theme\` until they pass.
 5. Run the project's own tests (\`npm test\`). Use
-   \`createMockPlayNodeContext\` from \`@noodlr/play-api/testing\` in tests.
+   \`createMockPlayNodeContext\` from \`@noodlrstudio/play-api/testing\` in tests.
 6. To try a Play node in the Noodlr Mac app, run \`npm run build:local\` and
    copy \`dist-local/<id>\` into the folder that **Developer › Show Plugins
    Folder** opens. It appears in **Developer › Open Node Lab** under
@@ -170,7 +170,7 @@ The Play API is at version \`0\`; minor releases may break things.
 export function designRulesMarkdown() {
   return `# Design rules for Play nodes
 
-- Wrap the view in \`NodeSurface\` and use controls from \`@noodlr/ui/play-node\`.
+- Wrap the view in \`NodeSurface\` and use controls from \`@noodlrstudio/ui/play-node\`.
   They follow the host's Light and Dark themes on their own.
 - Style your own elements with \`--noodlr-*\` tokens only. Never write colour
   literals (hex, rgb(), hsl(), oklch(), named colours); they will be wrong in
@@ -218,10 +218,10 @@ export function uiComponentsMarkdown() {
     const props = component.props.map((prop) => `- \`${prop}\``).join("\n");
     return `## ${component.name}\n\n${purpose}\n\n${props || "_No props._"}`;
   });
-  return `# @noodlr/ui Play node components
+  return `# @noodlrstudio/ui Play node components
 
-Import from \`@noodlr/ui/play-node\`, for example
-\`import { NodeSurface, Knob } from "@noodlr/ui/play-node";\`
+Import from \`@noodlrstudio/ui/play-node\`, for example
+\`import { NodeSurface, Knob } from "@noodlrstudio/ui/play-node";\`
 
 ${sections.join("\n\n")}
 `;
@@ -245,11 +245,11 @@ ${css}
 export function webAppBridgeMarkdown() {
   return `# Web app bridge
 
-\`@noodlr/plugin-sdk/web-app\` connects a web app you host to a Noodlr iframe
+\`@noodlrstudio/plugin-sdk/web-app\` connects a web app you host to a Noodlr iframe
 node. No review is needed.
 
 \`\`\`ts
-import { createNoodlrWebAppBridge } from "@noodlr/plugin-sdk/web-app";
+import { createNoodlrWebAppBridge } from "@noodlrstudio/plugin-sdk/web-app";
 
 const bridge = createNoodlrWebAppBridge({
   manifest: {
@@ -290,7 +290,7 @@ Open a pull request on ${REPOSITORY_URL} that includes:
 - The source and the manifest.
 - A licence that permits redistribution.
 - Tests. For Play nodes, use \`createMockPlayNodeContext\` from
-  \`@noodlr/play-api/testing\`.
+  \`@noodlrstudio/play-api/testing\`.
 - For audio bundles: versioned build output and SHA-256 checksums in the
   manifest (\`sha256-<base64>\`).
 

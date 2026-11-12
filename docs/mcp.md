@@ -1,6 +1,6 @@
 # Building plugins with a coding agent
 
-`@noodlr/mcp` is a [Model Context Protocol](https://modelcontextprotocol.io)
+`@noodlrstudio/mcp` is a [Model Context Protocol](https://modelcontextprotocol.io)
 server for building Noodlr Board plugins with a coding agent such as Claude
 Code. It gives the agent the real plugin contracts, the UI kit and theme
 tokens, and the checks reviewers run, so the agent writes against the actual
@@ -17,14 +17,14 @@ nothing anywhere.
 
 ## Set up
 
-> **Early preview.** `@noodlr/mcp` is not on npm yet. Until it is, build it
+> **Early preview.** `@noodlrstudio/mcp` is not on npm yet. Until it is, build it
 > from this repository (see [From source](#from-source)). The `npx` commands
 > below are how it will work once it is published.
 
 ### Claude Code
 
 ```sh
-claude mcp add noodlr -- npx -y @noodlr/mcp
+claude mcp add noodlr -- npx -y @noodlrstudio/mcp
 ```
 
 Start Claude Code in your plugin project. Paths in tool arguments are resolved
@@ -38,7 +38,7 @@ server:
 ```json
 {
   "mcpServers": {
-    "noodlr": { "command": "npx", "args": ["-y", "@noodlr/mcp"] }
+    "noodlr": { "command": "npx", "args": ["-y", "@noodlrstudio/mcp"] }
   }
 }
 ```
@@ -46,7 +46,7 @@ server:
 ### Other MCP clients
 
 Any client that supports stdio servers works. Use `npx` as the command and
-`-y @noodlr/mcp` as the arguments.
+`-y @noodlrstudio/mcp` as the arguments.
 
 ### From source
 
@@ -76,14 +76,14 @@ Reference material the agent reads before writing code.
 | `noodlr://docs/capabilities`             | Every capability and the context API behind it              |
 | `noodlr://docs/web-app-bridge`           | The web app bridge and the limits the host enforces         |
 | `noodlr://docs/submitting`               | What a review pull request needs                            |
-| `noodlr://ui/components`                 | `@noodlr/ui` Play node controls and their props             |
+| `noodlr://ui/components`                 | `@noodlrstudio/ui` Play node controls and their props       |
 | `noodlr://theme/tokens`                  | The `--noodlr-*` tokens and their Light and Dark values     |
 | `noodlr://schemas/play-node/manifest`    | Play node manifest JSON Schema                              |
 | `noodlr://schemas/play-node/definition`  | Play node manifest, state and ports JSON Schema             |
 | `noodlr://schemas/audio-plugin/manifest` | WAM 2, Cmajor and WCLAP plugin manifest JSON Schema         |
 
 The component list is generated from the UI kit, and the schemas and tokens
-come from `@noodlr/play-api`, so they always match the packages you install.
+come from `@noodlrstudio/play-api`, so they always match the packages you install.
 
 ### Tools
 
@@ -136,7 +136,7 @@ prompt create-play-node
 1. Read noodlr://docs/overview, noodlr://docs/design-rules,
    noodlr://docs/capabilities and noodlr://ui/components.
 2. Call scaffold_plugin with route "play-node" and id "com.example.compressor".
-3. Implement the node. Use @noodlr/ui controls and --noodlr-* tokens only.
+3. Implement the node. Use @noodlrstudio/ui controls and --noodlr-* tokens only.
    Declare exactly the capabilities you use.
 4. Add tests with createMockPlayNodeContext.
 5. Run validate_play_node, check_capabilities and lint_theme, then the
@@ -340,11 +340,11 @@ tool lint_theme
 ```
 
 The view styles its own text with `var(--noodlr-text-secondary)` and uses
-`@noodlr/ui` controls for everything else, so it works in Light and Dark.
+`@noodlrstudio/ui` controls for everything else, so it works in Light and Dark.
 
 ### 8. Test
 
-The mock context from `@noodlr/play-api` has no audio: `context.audio.context()`
+The mock context from `@noodlrstudio/play-api` has no audio: `context.audio.context()`
 and `context.audio.input()` throw. That is why the controller takes its audio
 objects as an optional argument. The test passes a small fake `AudioContext`
 that records what is created and connected, and checks that state changes

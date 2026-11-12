@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { PlayJsonObject, PlayNodeViewProps } from "@noodlr/play-api";
-  import { Button, Knob, NodeSurface } from "@noodlr/ui/play-node";
+  import type { PlayJsonObject, PlayNodeViewProps } from "@noodlrstudio/play-api";
+  import { Button, Knob, NodeSurface } from "@noodlrstudio/ui/play-node";
 
   export let context: PlayNodeViewProps<PlayJsonObject>["context"];
   export let readOnly = false;

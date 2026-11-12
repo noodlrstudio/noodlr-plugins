@@ -1,15 +1,15 @@
-# @noodlr/ui
+# @noodlrstudio/ui
 
 Svelte 5 controls for Noodlr Board Play nodes. They follow the host's Light
 and Dark themes on their own, so a node that uses them looks right in both.
 
 ```sh
-npm install @noodlr/ui @noodlr/play-api svelte
+npm install @noodlrstudio/ui @noodlrstudio/play-api svelte
 ```
 
 ```svelte
 <script lang="ts">
-  import { Knob, NodeSurface } from "@noodlr/ui/play-node";
+  import { Knob, NodeSurface } from "@noodlrstudio/ui/play-node";
 </script>
 
 <NodeSurface label="My node">
@@ -30,7 +30,7 @@ Style your own elements with the `--noodlr-*` custom properties, never colour
 literals. The host provides them; for previews and tests, import the defaults:
 
 ```ts
-import "@noodlr/ui/theme.css";
+import "@noodlrstudio/ui/theme.css";
 ```
 
 `svelte` is a peer dependency: a node and the host share one Svelte runtime.

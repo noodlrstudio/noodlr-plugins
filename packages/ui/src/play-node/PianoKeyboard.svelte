@@ -8,7 +8,7 @@
     pianoNoteOctave,
     type PianoKeyboardHost,
     type PianoNoteHandler,
-  } from "./piano-keyboard-host.js";
+  } from "./piano-keyboard-host";
 
   export let onNoteOn: PianoNoteHandler = () => {};
   export let onNoteOff: PianoNoteHandler = () => {};

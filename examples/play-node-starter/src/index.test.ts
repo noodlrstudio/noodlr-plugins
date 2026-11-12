@@ -3,7 +3,7 @@ import {
   PLAY_API_VERSION,
   createMockPlayNodeContext,
   createPlayNodeSharedDefaults,
-} from "@noodlr/play-api";
+} from "@noodlrstudio/play-api";
 import { starterNode } from "./index";
 
 describe("starter node", () => {

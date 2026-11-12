@@ -83,8 +83,8 @@ function playNodeFiles(options: ScaffoldOptions): ScaffoldFile[] {
           "build:local": "vite build --config vite.local.config.ts",
         },
         dependencies: {
-          "@noodlr/play-api": "^0.3.0",
-          "@noodlr/ui": "^0.1.0",
+          "@noodlrstudio/play-api": "^0.3.0",
+          "@noodlrstudio/ui": "^0.1.0",
           svelte: "^5.41.3",
         },
         devDependencies: {
@@ -151,7 +151,7 @@ export default {
     },
     {
       path: "src/index.ts",
-      content: `import { definePlayNode } from "@noodlr/play-api";
+      content: `import { definePlayNode } from "@noodlrstudio/play-api";
 import ${component} from "./${component}.svelte";
 
 export const ${exportName} = definePlayNode({
@@ -188,8 +188,8 @@ export const ${exportName} = definePlayNode({
     {
       path: `src/${component}.svelte`,
       content: `<script lang="ts">
-  import type { PlayJsonObject, PlayNodeViewProps } from "@noodlr/play-api";
-  import { Knob, NodeSurface } from "@noodlr/ui/play-node";
+  import type { PlayJsonObject, PlayNodeViewProps } from "@noodlrstudio/play-api";
+  import { Knob, NodeSurface } from "@noodlrstudio/ui/play-node";
 
   export let context: PlayNodeViewProps<PlayJsonObject>["context"];
   export let readOnly = false;
@@ -238,7 +238,7 @@ import {
   PLAY_API_VERSION,
   createMockPlayNodeContext,
   createPlayNodeSharedDefaults,
-} from "@noodlr/play-api";
+} from "@noodlrstudio/play-api";
 import { ${exportName} } from "./index";
 
 describe(${JSON.stringify(options.name)}, () => {
@@ -376,7 +376,7 @@ function webAppFiles(options: ScaffoldOptions): ScaffoldFile[] {
           test: "vitest run",
         },
         dependencies: {
-          "@noodlr/plugin-sdk": "^0.1.0",
+          "@noodlrstudio/plugin-sdk": "^0.1.0",
         },
         devDependencies: {
           typescript: "^5.9.3",
@@ -407,7 +407,7 @@ function webAppFiles(options: ScaffoldOptions): ScaffoldFile[] {
     },
     {
       path: "src/bridge.ts",
-      content: `import { createNoodlrWebAppBridge } from "@noodlr/plugin-sdk/web-app";
+      content: `import { createNoodlrWebAppBridge } from "@noodlrstudio/plugin-sdk/web-app";
 
 export interface AppState {
   lastNote: number | null;
@@ -465,7 +465,7 @@ document.getElementById("note")!.addEventListener("click", () => sendNote(60));
       path: "README.md",
       content: `# ${options.name}
 
-A web app that connects to Noodlr Board through \`@noodlr/plugin-sdk\`. It
+A web app that connects to Noodlr Board through \`@noodlrstudio/plugin-sdk\`. It
 needs no review: host it anywhere and add it to a board as a web app node.
 
 \`\`\`sh

@@ -1,4 +1,4 @@
-// Reads the props of every @noodlr/ui Play node control and writes them to
+// Reads the props of every @noodlrstudio/ui Play node control and writes them to
 // src/generated/ui-catalogue.ts, so the MCP server's component reference
 // stays in step with the UI kit.
 import { readdir, readFile, writeFile } from "node:fs/promises";

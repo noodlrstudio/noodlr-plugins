@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { resolveOnAccentCss } from "@noodlr/play-api";
+  import { resolveOnAccentCss } from "@noodlrstudio/play-api";
 
   export let label: string;
   export let description = "";

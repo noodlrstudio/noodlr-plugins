@@ -1,4 +1,4 @@
-import { createNoodlrWebAppBridge } from "@noodlr/plugin-sdk/web-app";
+import { createNoodlrWebAppBridge } from "@noodlrstudio/plugin-sdk/web-app";
 
 let bank = 0;
 

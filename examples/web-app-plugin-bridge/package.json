@@ -6,7 +6,7 @@
     "test": "vitest run --passWithNoTests"
   },
   "dependencies": {
-    "@noodlr/plugin-sdk": "^0.1.0"
+    "@noodlrstudio/plugin-sdk": "^0.1.0"
   },
   "devDependencies": {
     "vitest": "^4.1.9"

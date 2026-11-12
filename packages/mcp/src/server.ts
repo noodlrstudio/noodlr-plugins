@@ -9,8 +9,8 @@ import {
   renderPlayAppearanceCss,
   validatePlayNodeDefinition,
   validatePlayNodeManifest,
-} from "@noodlr/play-api";
-import { sanitizeNoodlrWebAppPluginManifest } from "@noodlr/plugin-sdk/web-app";
+} from "@noodlrstudio/play-api";
+import { sanitizeNoodlrWebAppPluginManifest } from "@noodlrstudio/plugin-sdk/web-app";
 import { z } from "zod";
 import { checkCapabilities, findDeclaredCapabilities } from "./capabilities.js";
 import {
@@ -80,7 +80,7 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
     { name: SERVER_NAME, version: SERVER_VERSION },
     {
       instructions:
-        "Tools and reference for building Noodlr Board plugins: Play nodes (Svelte + @noodlr/play-api), web app bridge plugins (@noodlr/plugin-sdk) and audio plugins (WAM 2, Cmajor, WCLAP). Read noodlr://docs/overview first. After editing a Play node, run validate_play_node, check_capabilities and lint_theme.",
+        "Tools and reference for building Noodlr Board plugins: Play nodes (Svelte + @noodlrstudio/play-api), web app bridge plugins (@noodlrstudio/plugin-sdk) and audio plugins (WAM 2, Cmajor, WCLAP). Read noodlr://docs/overview first. After editing a Play node, run validate_play_node, check_capabilities and lint_theme.",
     },
   );
 
@@ -148,7 +148,7 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
   markdown(
     "ui-components",
     "noodlr://ui/components",
-    "@noodlr/ui components",
+    "@noodlrstudio/ui components",
     "Play node controls and their props, generated from the UI kit.",
     uiComponentsMarkdown,
   );
@@ -163,7 +163,7 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
     "web-app-bridge",
     "noodlr://docs/web-app-bridge",
     "Web app bridge",
-    "Connecting a hosted web app with @noodlr/plugin-sdk/web-app.",
+    "Connecting a hosted web app with @noodlrstudio/plugin-sdk/web-app.",
     webAppBridgeMarkdown,
   );
   markdown(
@@ -429,7 +429,7 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
 
 1. Read noodlr://docs/overview, noodlr://docs/design-rules, noodlr://docs/capabilities and noodlr://ui/components.
 2. Call scaffold_plugin with route "play-node"${id ? ` and id "${id}"` : ""}.
-3. Implement the node. Use @noodlr/ui controls and --noodlr-* tokens only. Declare exactly the capabilities you use.
+3. Implement the node. Use @noodlrstudio/ui controls and --noodlr-* tokens only. Declare exactly the capabilities you use.
 4. Add tests with createMockPlayNodeContext.
 5. Run validate_play_node, check_capabilities and lint_theme, then the project's tests, and fix everything they report.
 6. Run \`npm run build:local\` in the project to build it for the Noodlr Mac app. It writes dist-local/${id ?? "<id>"}/. Then tell the developer how to try it:
@@ -459,7 +459,7 @@ ${localPluginSteps(id ?? "<id>")}`,
             text: `Connect this web app to Noodlr Board with the web app bridge.
 
 1. Read noodlr://docs/web-app-bridge.
-2. Add @noodlr/plugin-sdk and create the bridge once at start-up${id ? ` with id "${id}"` : ""}. Declare only the MIDI ports the app needs.
+2. Add @noodlrstudio/plugin-sdk and create the bridge once at start-up${id ? ` with id "${id}"` : ""}. Declare only the MIDI ports the app needs.
 3. Route incoming MIDI to the app, send its MIDI out with bridge.sendMidi, and save restorable state with bridge.updateState (JSON, at most 32 KB).
 4. Apply onAppearanceChange tokens so the app matches the host theme.
 5. Run validate_web_app_manifest on the manifest.

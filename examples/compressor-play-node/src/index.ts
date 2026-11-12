@@ -1,4 +1,4 @@
-import { definePlayNode } from "@noodlr/play-api";
+import { definePlayNode } from "@noodlrstudio/play-api";
 import Compressor from "./Compressor.svelte";
 import { createCompressorController } from "./compressor-controller";
 

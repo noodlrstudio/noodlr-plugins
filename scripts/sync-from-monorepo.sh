@@ -29,7 +29,17 @@ LOCAL_ONLY=(
   packages/play-api/README.md
   packages/play-api/tsconfig.build.json
   packages/play-api/scripts/add-js-extensions.mjs
+  packages/ui/README.md
+  packages/ui/svelte.config.js
+  packages/ui/tsconfig.json
+  examples/compressor-play-node
 )
+
+# The monorepo's workspace packages are @noodlr/*; they are published from
+# here as @noodlrstudio/*. Every synced file is rewritten, so nothing published
+# depends on the @noodlr scope, which this project doesn't control.
+MONOREPO_SCOPE='@noodlr/'
+PUBLISHED_SCOPE='@noodlrstudio/'
 
 if [[ $# -lt 1 || $# -gt 2 ]]; then
   echo "usage: $0 <path-to-noodlrboard> [git-ref]" >&2
@@ -51,6 +61,16 @@ staging=$(mktemp -d)
 trap 'rm -rf "$staging"' EXIT
 
 git -C "$source_repo" archive "$source_sha" -- "${SYNC_PATHS[@]}" | tar -x -C "$staging"
+
+# Rename the package scope in every text file before anything is copied.
+# (Passed through the environment so Perl doesn't read "@noodlr" as an array.)
+grep -rlI --null -F "$MONOREPO_SCOPE" "$staging" |
+  FROM="$MONOREPO_SCOPE" TO="$PUBLISHED_SCOPE" \
+    xargs -0 -r perl -pi -e 's/\Q$ENV{FROM}\E/$ENV{TO}/g'
+if grep -rqI -F "$MONOREPO_SCOPE" "$staging"; then
+  echo "error: $MONOREPO_SCOPE references remain after renaming" >&2
+  exit 1
+fi
 
 for path in "${SYNC_PATHS[@]}"; do
   excludes=(
