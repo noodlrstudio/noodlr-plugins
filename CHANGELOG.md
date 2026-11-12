@@ -8,3 +8,6 @@ here.
 
 - Repository scaffolded. Packages are being moved here from the main Noodlr
   codebase and are not on npm yet.
+- Add `@noodlr/mcp`, a local MCP server for building plugins with coding
+  agents: docs, schemas, UI catalogue and theme tokens as resources; scaffold,
+  validate, capability and theme checks as tools.
