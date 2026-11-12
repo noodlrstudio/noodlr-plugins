@@ -7,6 +7,12 @@ writes plugins against the real API instead of guessing.
 
 It runs locally over stdio. It needs no account and sends nothing anywhere.
 
+Full guide, with a walkthrough that builds a compressor:
+[Building plugins with a coding agent](../../docs/mcp.md).
+
+> Not on npm yet. Until it is, build from this repository and run
+> `node packages/mcp/dist/bin.js` instead of `npx -y @noodlr/mcp`.
+
 ## Set up
 
 Claude Code:
@@ -76,3 +82,14 @@ npm test
 
 `src/generated/ui-catalogue.ts` is generated from `packages/ui/src/play-node`.
 Do not edit it by hand.
+
+To call the built server by hand, use `scripts/call.mjs` (run from the repo
+root, so paths resolve there):
+
+```sh
+node packages/mcp/scripts/call.mjs tools
+node packages/mcp/scripts/call.mjs check_capabilities '{"directory":"examples/compressor-play-node"}'
+```
+
+Or open it in the [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
+`npx @modelcontextprotocol/inspector node packages/mcp/dist/bin.js`.

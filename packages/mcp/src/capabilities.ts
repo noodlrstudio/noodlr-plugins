@@ -131,7 +131,9 @@ const USAGE_PATTERNS: UsagePattern[] = [
   },
   {
     capability: "collaboration.shared-state",
-    pattern: /scope\s*:\s*["']shared-persisted["']/,
+    // Any "shared-persisted" literal, so `const shared = "shared-persisted"`
+    // followed by `scope: shared` counts too.
+    pattern: /["']shared-persisted["']/,
     label: "shared-persisted state field",
   },
 ];

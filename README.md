@@ -24,6 +24,9 @@ Not sure which to pick? Start with the web app bridge. It needs no review and
 works with a site you already have. Move to a Play node when you need audio
 ports, transport sync or shared state.
 
+Building with a coding agent? Connect it to [`@noodlr/mcp`](packages/mcp) and
+read [Building plugins with a coding agent](docs/mcp.md).
+
 ## Packages
 
 | Package                                     | Purpose                                                                                                                                |
@@ -41,6 +44,7 @@ JSON Schemas for Play node manifests and definitions are in
 | Starter                                                            | Use it for                                           |
 | ------------------------------------------------------------------ | ---------------------------------------------------- |
 | [`examples/play-node-starter`](examples/play-node-starter)         | A Play node with shared state, theming and transport |
+| [`examples/compressor-play-node`](examples/compressor-play-node)   | An audio effect Play node built with `@noodlr/mcp`   |
 | [`examples/web-app-plugin-bridge`](examples/web-app-plugin-bridge) | Connecting a hosted web app over the bridge          |
 | [`examples/wam-plugin-starter`](examples/wam-plugin-starter)       | A minimal WAM 2 gain effect                          |
 | [`examples/cmajor-plugin-starter`](examples/cmajor-plugin-starter) | A Cmajor patch exported for Web Audio                |

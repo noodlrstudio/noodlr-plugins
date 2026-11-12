@@ -54,6 +54,19 @@ describe("checkCapabilities", () => {
     expect(report.missing).toEqual(["collaboration.shared-state"]);
   });
 
+  it("sees shared-persisted scopes set through a constant", () => {
+    const report = checkCapabilities(
+      ["collaboration.shared-state"],
+      [
+        {
+          path: "src/index.ts",
+          content: `const shared = "shared-persisted" as const;\nlevel: { scope: shared }`,
+        },
+      ],
+    );
+    expect(report.unused).toEqual([]);
+  });
+
   it("reads declared capabilities from definePlayNode", () => {
     const found = findDeclaredCapabilities([
       {
