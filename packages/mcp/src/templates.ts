@@ -84,7 +84,7 @@ function playNodeFiles(options: ScaffoldOptions): ScaffoldFile[] {
         },
         dependencies: {
           "@noodlr/play-api": "^0.3.0",
-          "@noodlr/ui": "^0.0.0",
+          "@noodlr/ui": "^0.1.0",
           svelte: "^5.41.3",
         },
         devDependencies: {

@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { PlayMidiControlBinding } from "@noodlr/play-api";
-  import { bindMidiControl } from "./midi-control";
+  import { bindMidiControl } from "./midi-control.js";
 
   export let label: string;
   export let title = "";

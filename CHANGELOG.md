@@ -11,3 +11,10 @@ here.
 - Add `@noodlr/mcp`, a local MCP server for building plugins with coding
   agents: docs, schemas, UI catalogue and theme tokens as resources; scaffold,
   validate, capability and theme checks as tools.
+- `@noodlr/plugin-sdk` and `@noodlr/ui` are now MIT, like the rest of the
+  repository.
+- `@noodlr/ui` 0.1.0 is publishable: it ships preprocessed components with
+  type declarations from `dist` (built with `svelte-package`).
+- The Play node JSON Schemas include the `MonitorPlay` icon, which the
+  validator already accepted.
+- `@noodlr/mcp` has a `server.json` for the MCP Registry.

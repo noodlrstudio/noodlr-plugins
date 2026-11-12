@@ -1,1 +1,1 @@
-export * from "./play-node";
+export * from "./play-node/index.js";

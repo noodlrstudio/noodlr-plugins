@@ -1,20 +1,48 @@
 {
   "name": "@noodlr/ui",
-  "version": "0.0.0",
-  "private": true,
-  "license": "AGPL-3.0-or-later",
+  "version": "0.1.0",
+  "description": "Svelte controls for Noodlr Play nodes that follow the host Light and Dark themes, and the --noodlr-* theme tokens.",
+  "license": "MIT",
   "type": "module",
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "svelte": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "exports": {
-    ".": "./src/index.ts",
-    "./play-node": "./src/play-node/index.ts",
-    "./theme.css": "./src/theme/tokens.css"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "svelte": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./play-node": {
+      "types": "./dist/play-node/index.d.ts",
+      "svelte": "./dist/play-node/index.js",
+      "default": "./dist/play-node/index.js"
+    },
+    "./theme.css": "./dist/theme/tokens.css"
+  },
+  "scripts": {
+    "build": "svelte-package -i src -o dist",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "@noodlr/play-api": "^0.3.0"
   },
   "peerDependencies": {
     "svelte": "^5.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/package": "^2.5.8",
+    "@sveltejs/vite-plugin-svelte": "^6.2.1",
+    "svelte": "^5.41.3",
+    "typescript": "^5.9.2"
   }
 }
