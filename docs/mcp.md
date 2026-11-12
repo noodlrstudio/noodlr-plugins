@@ -17,9 +17,9 @@ nothing anywhere.
 
 ## Set up
 
-> **Early preview.** `@noodlrstudio/mcp` is not on npm yet. Until it is, build it
-> from this repository (see [From source](#from-source)). The `npx` commands
-> below are how it will work once it is published.
+> **Early preview.** `@noodlrstudio/mcp` is on npm, and the Play API it serves
+> is at version `0`, so expect changes. To work on the server itself, see
+> [From source](#from-source).
 
 ### Claude Code
 

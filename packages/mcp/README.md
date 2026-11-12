@@ -10,9 +10,6 @@ It runs locally over stdio. It needs no account and sends nothing anywhere.
 Full guide, with a walkthrough that builds a compressor:
 [Building plugins with a coding agent](../../docs/mcp.md).
 
-> Not on npm yet. Until it is, build from this repository and run
-> `node packages/mcp/dist/bin.js` instead of `npx -y @noodlrstudio/mcp`.
-
 ## Set up
 
 Claude Code:
