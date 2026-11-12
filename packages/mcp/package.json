@@ -2,6 +2,7 @@
   "name": "@noodlr/mcp",
   "version": "0.1.0",
   "description": "A Model Context Protocol server that gives coding agents the Noodlr plugin contracts, schemas, UI kit and checks.",
+  "mcpName": "io.github.noodlrstudio/noodlr",
   "license": "MIT",
   "type": "module",
   "sideEffects": false,

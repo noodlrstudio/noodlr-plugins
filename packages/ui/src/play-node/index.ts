@@ -20,4 +20,4 @@ export {
   type PianoKeyboardState,
   type PianoNoteHandler,
   type PianoShelfPlacement,
-} from "./piano-keyboard-host";
+} from "./piano-keyboard-host.js";

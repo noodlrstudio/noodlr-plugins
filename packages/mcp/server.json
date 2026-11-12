@@ -1,0 +1,21 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.noodlrstudio/noodlr",
+  "title": "Noodlr plugins",
+  "description": "Build Noodlr Board plugins: Play API docs, schemas, UI kit, scaffolding and review checks.",
+  "version": "0.1.0",
+  "websiteUrl": "https://github.com/noodlrstudio/noodlr-plugins/blob/main/docs/mcp.md",
+  "repository": {
+    "url": "https://github.com/noodlrstudio/noodlr-plugins",
+    "source": "github",
+    "subfolder": "packages/mcp"
+  },
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@noodlr/mcp",
+      "version": "0.1.0",
+      "transport": { "type": "stdio" }
+    }
+  ]
+}

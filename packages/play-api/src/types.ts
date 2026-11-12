@@ -9,9 +9,7 @@ export const PLAY_API_VERSION = "0" as const;
 
 export type PlayJsonPrimitive = string | number | boolean | null;
 export type PlayJsonValue =
-  | PlayJsonPrimitive
-  | PlayJsonValue[]
-  | { [key: string]: PlayJsonValue };
+  PlayJsonPrimitive | PlayJsonValue[] | { [key: string]: PlayJsonValue };
 export type PlayJsonObject = { [key: string]: PlayJsonValue };
 
 export type PlayNodeCapability =
@@ -40,9 +38,7 @@ export type PlayNodeCapability =
   | "asset.write";
 
 export type PlayStateScope =
-  | "shared-persisted"
-  | "local-persisted"
-  | "local-ephemeral";
+  "shared-persisted" | "local-persisted" | "local-ephemeral";
 
 export type PlayAssetReference = PlayJsonObject & {
   id: string;
@@ -170,9 +166,7 @@ export interface PlayMidiRawEvent {
 }
 
 export type PlayMidiMessage =
-  | PlayMidiNoteEvent
-  | PlayMidiCcEvent
-  | PlayMidiRawEvent;
+  PlayMidiNoteEvent | PlayMidiCcEvent | PlayMidiRawEvent;
 
 export interface PlayMidiInput {
   /**
@@ -425,19 +419,10 @@ export interface PlayFilesApi {
 }
 
 export type PlayAssetAvailability =
-  | "local"
-  | "syncing"
-  | "shared"
-  | "missing"
-  | "error";
+  "local" | "syncing" | "shared" | "missing" | "error";
 
 export type PlayLocalAssetSyncStatus =
-  | "uploading"
-  | "available"
-  | "downloading"
-  | "preparing"
-  | "ready"
-  | "error";
+  "uploading" | "available" | "downloading" | "preparing" | "ready" | "error";
 
 export interface PlayAssetsApi {
   store(
