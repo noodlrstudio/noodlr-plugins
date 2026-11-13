@@ -161,7 +161,8 @@ audio: only MIDI, lifecycle and state cross the frame.
 6. To try a Play node in the Noodlr Mac app, run \`npm run build:local\` and
    copy \`dist-local/<id>\` into the folder that **Developer › Show Plugins
    Folder** opens. It appears in **Developer › Open Node Lab** under
-   **Local plugins**.
+   **Local plugins**, and in the Tab menu of **Developer › Open Local Room**
+   (Mac app 1.0.8 or later). Both need developer access.
 7. Read \`noodlr://docs/submitting\` before opening a pull request.
 
 The Play API is at version \`0\`; minor releases may break things.

@@ -153,6 +153,7 @@ describe("scaffold", () => {
     );
     expect(file(".gitignore")).toContain("dist-local");
     expect(file("README.md")).toContain("Developer › Open Node Lab");
+    expect(file("README.md")).toContain("Developer › Open Local Room");
   });
 
   it("creates a web app on audiframe, pinned to the exact client version", () => {

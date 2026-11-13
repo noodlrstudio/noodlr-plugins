@@ -3,7 +3,7 @@
   "name": "io.github.noodlrstudio/noodlr",
   "title": "Noodlr plugins",
   "description": "Build Noodlr Board plugins: Play API docs, schemas, UI kit, scaffolding and review checks.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "websiteUrl": "https://github.com/noodlrstudio/noodlr-plugins/blob/main/docs/mcp.md",
   "repository": {
     "url": "https://github.com/noodlrstudio/noodlr-plugins",
@@ -14,7 +14,7 @@
     {
       "registryType": "npm",
       "identifier": "@noodlrstudio/mcp",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "transport": {
         "type": "stdio"
       }

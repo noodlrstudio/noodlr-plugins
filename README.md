@@ -32,7 +32,8 @@ npm run validate # type-check and test it
 ```
 
 To play it inside noodlr, `npm run build:local` and load it in the noodlr Mac
-app's Node Lab or a local Room. That needs [developer access](#developer-access).
+app's Node Lab or a local Room (**Developer › Open Local Room**, Mac app 1.0.8
+or later). That needs [developer access](#developer-access).
 
 ## Ways to build a plugin
 

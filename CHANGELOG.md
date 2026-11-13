@@ -6,6 +6,13 @@ here.
 
 ## Unreleased
 
+- `@noodlrstudio/mcp` 0.2.2: the local plugin steps (scaffold README, the
+  `noodlr://docs` workflow and `docs/mcp.md`) cover **Developer › Open Local
+  Room** in the Mac app 1.0.8, where a local plugin can be played with other
+  nodes, and say local plugins need developer access.
+
+## 2026-11-13: `@noodlrstudio/mcp` 0.2.1
+
 - `@noodlrstudio/mcp` 0.2.1: uses `@audiframe/protocol` 0.1.0-alpha.3, whose
   type declarations now work with NodeNext, so its workaround is gone; the
   `web-app` scaffold and docs pin `@audiframe/client` 0.1.0-alpha.3.
