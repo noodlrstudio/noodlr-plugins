@@ -90,3 +90,17 @@ node packages/mcp/scripts/call.mjs check_capabilities '{"directory":"examples/co
 
 Or open it in the [MCP Inspector](https://github.com/modelcontextprotocol/inspector):
 `npx @modelcontextprotocol/inspector node packages/mcp/dist/bin.js`.
+
+## Releasing
+
+1. Bump `version` in `package.json`, `src/server.ts` (`SERVER_VERSION`) and
+   both places in `server.json`, and add a `CHANGELOG.md` entry.
+2. Publish to npm: `npm publish` in this folder.
+3. In GitHub, run **Actions › Publish to MCP Registry › Run workflow**. It
+   checks that `server.json` matches the version on npm, then publishes it to
+   the [MCP Registry](https://registry.modelcontextprotocol.io) as
+   `io.github.noodlrstudio/noodlr`, using GitHub's OIDC identity for the
+   noodlrstudio organization.
+
+`mcp-publisher login github` run on your own machine can't publish under the
+organization: it only sees your personal account.
