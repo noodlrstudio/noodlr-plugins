@@ -1,0 +1,37 @@
+name: Request developer access
+description: Play your own unreviewed Play nodes inside noodlr (Node Lab and local Rooms in the Mac app).
+title: "Developer access: "
+labels: ["developer-access"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Developer access lets your noodlr account load plugins you're building from the Mac app's local plugins folder (**Developer › Load Local Plugins**), in Node Lab and in local Rooms. Local plugins never reach shared spaces.
+
+        You don't need access to build and test with `npm run dev` and `npm run validate`, or to make a web app: any Web App node can open those.
+
+        **Don't post your email address here.** Issues are public. If we grant access, we'll ask privately for the email you sign in to noodlr with.
+  - type: textarea
+    id: plugin
+    attributes:
+      label: What are you building?
+      description: A sentence or two, and a link if there is one (a repo, a demo or an existing app).
+    validations:
+      required: true
+  - type: dropdown
+    id: route
+    attributes:
+      label: Plugin type
+      options:
+        - Play node
+        - Audio plugin (WAM 2, Cmajor or WCLAP)
+        - Not sure yet
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Before you ask
+      options:
+        - label: I understand local plugins run unreviewed with my account's access, only in local Rooms and Node Lab, and that only code I trust should go in the plugins folder.
+          required: true

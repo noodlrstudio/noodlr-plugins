@@ -38,6 +38,7 @@ describe("noodlr MCP server", () => {
       expect.arrayContaining([
         "scaffold_plugin",
         "validate_play_node",
+        "validate_audiframe_manifest",
         "validate_web_app_manifest",
         "validate_audio_plugin_manifest",
         "check_capabilities",
@@ -125,7 +126,61 @@ describe("noodlr MCP server", () => {
     expect(text(bad).issues.join("\n")).toContain("icon");
   });
 
-  it("validates web app and audio plugin manifests", async () => {
+  it("validates audiframe manifests with audiframe's own checks", async () => {
+    const good = await client.callTool({
+      name: "validate_audiframe_manifest",
+      arguments: {
+        manifest: {
+          id: "com.example.drum-machine",
+          name: "Drum Machine",
+          appVersion: "1.0.0",
+          protocolVersions: [{ major: 1, minor: 0 }],
+          capabilities: [
+            { id: "lifecycle", version: 1 },
+            { id: "midi.input", version: 1 },
+          ],
+          ports: [
+            { id: "midi-in", label: "MIDI In", direction: "in", type: "midi1" },
+          ],
+        },
+      },
+    });
+    expect(text(good)).toEqual({ valid: true, issues: [] });
+
+    const bad = await client.callTool({
+      name: "validate_audiframe_manifest",
+      arguments: {
+        manifest: {
+          id: "drum",
+          name: "Drum Machine",
+          appVersion: "1",
+          protocolVersions: [{ major: 2, minor: 0 }],
+          capabilities: [{ id: "midi.input", version: 1 }],
+          ports: [
+            { id: "midi-in", label: "In", direction: "in", type: "midi" },
+          ],
+        },
+      },
+    });
+    expect(bad.isError).toBe(true);
+    const issues = text(bad).issues.join("\n");
+    for (const field of [
+      "id:",
+      "appVersion:",
+      "protocolVersions:",
+      "lifecycle",
+      "ports[0]",
+    ]) {
+      expect(issues).toContain(field);
+    }
+
+    const web = await client.readResource({ uri: "noodlr://docs/web-apps" });
+    const [content] = web.contents as Array<{ text: string }>;
+    expect(content.text).toContain("@audiframe/client@0.1.0-alpha.2");
+    expect(content.text).toContain("?audiframe=1");
+  });
+
+  it("validates legacy web app and audio plugin manifests", async () => {
     const web = await client.callTool({
       name: "validate_web_app_manifest",
       arguments: { manifest: { id: "bad", name: "x", version: "1" } },

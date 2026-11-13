@@ -1,3 +1,4 @@
+import { AUDIFRAME_CLIENT_VERSION } from "./audiframe.js";
 import { REPOSITORY_URL } from "./knowledge.js";
 
 export type ScaffoldRoute = "play-node" | "web-app";
@@ -122,6 +123,7 @@ export default defineConfig({
 });
 `,
     },
+    ...playNodePreviewFiles(exportName, options.name),
     {
       path: "vite.local.config.ts",
       content: localBuildConfig(options),
@@ -291,6 +293,183 @@ contract and the submission process.
   ];
 }
 
+/**
+ * index.html and src/preview.ts: `npm run dev` shows the node in a browser
+ * with the mock host context, the theme tokens and real Web Audio for its
+ * audio ports, so it can be tried without the Mac app.
+ */
+export function playNodePreviewFiles(
+  exportName: string,
+  name: string,
+): ScaffoldFile[] {
+  const title = name.replace(/[<&]/g, "");
+  return [
+    {
+      path: "index.html",
+      content: `<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>${title} preview</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        gap: 1rem;
+        background: var(--noodlr-surface-canvas);
+        color: var(--noodlr-text-primary);
+        font-family: system-ui, sans-serif;
+      }
+      #toolbar {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        font-size: 0.8rem;
+        color: var(--noodlr-text-secondary);
+      }
+      #toolbar button {
+        font: inherit;
+        padding: 0.35rem 0.7rem;
+        border-radius: 0.5rem;
+        border: 1px solid var(--noodlr-border-strong);
+        background: var(--noodlr-surface-2);
+        color: var(--noodlr-text-primary);
+        cursor: pointer;
+      }
+      #node {
+        background: var(--noodlr-surface-1);
+        border: 1px solid var(--noodlr-border);
+        border-radius: 1rem;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="toolbar"></div>
+    <div id="node"></div>
+    <script type="module" src="/src/preview.ts"></script>
+  </body>
+</html>
+`,
+    },
+    {
+      path: "src/preview.ts",
+      content: `// npm run dev: the node in a browser, with the mock host context from
+// @noodlrstudio/play-api/testing, the noodlr theme tokens, and real Web Audio
+// for its audio ports. For a quick look while you build. Use the Mac app's
+// Node Lab (npm run build:local) to try it in noodlr itself.
+import { mount } from "svelte";
+import "@noodlrstudio/ui/theme.css";
+import {
+  createMockPlayNodeContext,
+  createPlayNodeSharedDefaults,
+  type PlayNodeCapability,
+} from "@noodlrstudio/play-api";
+import { ${exportName} as node } from "./index";
+
+const ports = node.ports ?? [];
+const mock = createMockPlayNodeContext(
+  createPlayNodeSharedDefaults(node.state.fields),
+  [...(node.manifest.capabilities ?? [])] as PlayNodeCapability[],
+  { frame: { ports, size: node.manifest.preferredSize } },
+);
+
+// The mock has no audio; give its audio ports a real AudioContext. Inputs are
+// gain nodes the test tone feeds; outputs go to the speakers.
+const audio = new AudioContext();
+const inputs = new Map<string, GainNode>();
+const inputFor = (portId: string) => {
+  let gain = inputs.get(portId);
+  if (!gain) inputs.set(portId, (gain = audio.createGain()));
+  return gain;
+};
+Object.assign(mock.context.audio, {
+  ensureReady: async () => {
+    await audio.resume();
+    return audio;
+  },
+  context: () => audio,
+  input: (portId: string) => ({ node: inputFor(portId) }),
+  output: () => ({
+    connect(source: AudioNode) {
+      source.connect(audio.destination);
+      return () => source.disconnect(audio.destination);
+    },
+  }),
+});
+
+const toolbar = document.getElementById("toolbar")!;
+const button = (label: string, onClick: () => void) => {
+  const element = document.createElement("button");
+  element.type = "button";
+  element.textContent = label;
+  element.addEventListener("click", onClick);
+  toolbar.append(element);
+  return element;
+};
+
+let theme: "dark" | "light" = "dark";
+button("Light / Dark", () => {
+  theme = theme === "dark" ? "light" : "dark";
+  document.documentElement.dataset.noodlrTheme = theme;
+  mock.setTheme(theme);
+});
+
+if (ports.some((port) => port.type === "audio" && port.direction === "in")) {
+  let tone: OscillatorNode | null = null;
+  const toneButton = button("Play test tone", () => {
+    void audio.resume();
+    if (tone) {
+      tone.stop();
+      tone = null;
+      toneButton.textContent = "Play test tone";
+      return;
+    }
+    tone = audio.createOscillator();
+    tone.type = "sawtooth";
+    tone.frequency.value = 110;
+    const level = audio.createGain();
+    level.gain.value = 0.3;
+    tone.connect(level);
+    for (const port of ports) {
+      if (port.type === "audio" && port.direction === "in") {
+        level.connect(inputFor(port.id));
+      }
+    }
+    tone.start();
+    toneButton.textContent = "Stop test tone";
+  });
+}
+
+const note = document.createElement("span");
+note.textContent = "Mock host: no board, cables or other players.";
+toolbar.append(note);
+
+// Nodes fill the frame the host gives them, so give the preview one too.
+const size = node.manifest.preferredSize ?? { width: 300, height: 260 };
+const target = document.getElementById("node")!;
+target.style.width = \`\${size.width}px\`;
+target.style.height = \`\${size.height}px\`;
+
+const controller = await node.setup?.(mock.context as never);
+mount(node.view, {
+  target,
+  props: {
+    context: mock.context,
+    controller,
+    size,
+    active: true,
+    readOnly: false,
+  } as never,
+});
+`,
+    },
+  ];
+}
+
 /** The plugins folder of the App Store build and of a development build. */
 export const LOCAL_PLUGIN_FOLDERS = {
   app: "~/Library/Containers/com.5of12.noodlr/Data/Library/Application Support/Noodlr/Plugins",
@@ -362,6 +541,7 @@ export default defineConfig({
 }
 
 function webAppFiles(options: ScaffoldOptions): ScaffoldFile[] {
+  const title = options.name.replace(/[<&]/g, "");
   return [
     {
       path: "package.json",
@@ -373,16 +553,30 @@ function webAppFiles(options: ScaffoldOptions): ScaffoldFile[] {
         scripts: {
           dev: "vite",
           build: "vite build",
-          test: "vitest run",
+          check: "tsc --noEmit",
         },
         dependencies: {
-          "@noodlrstudio/plugin-sdk": "^0.1.0",
+          // audiframe is in alpha: pin the exact version.
+          "@audiframe/client": AUDIFRAME_CLIENT_VERSION,
         },
         devDependencies: {
           typescript: "^5.9.3",
           vite: "^7.2.2",
-          vitest: "^4.1.9",
         },
+      }),
+    },
+    {
+      path: "tsconfig.json",
+      content: json({
+        compilerOptions: {
+          lib: ["ES2022", "DOM"],
+          module: "ESNext",
+          moduleResolution: "bundler",
+          noEmit: true,
+          strict: true,
+          target: "ES2022",
+        },
+        include: ["src/**/*.ts"],
       }),
     },
     {
@@ -392,13 +586,13 @@ function webAppFiles(options: ScaffoldOptions): ScaffoldFile[] {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${options.name.replace(/[<&]/g, "")}</title>
+    <title>${title}</title>
   </head>
   <body>
     <main>
-      <h1>${options.name.replace(/[<&]/g, "")}</h1>
-      <p id="status">Waiting for Noodlr…</p>
-      <button id="note" type="button">Send middle C</button>
+      <h1>${title}</h1>
+      <p id="status">Not connected. Open this app in a Noodlr Web App node.</p>
+      <button id="note" type="button">Play middle C</button>
     </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
@@ -406,75 +600,107 @@ function webAppFiles(options: ScaffoldOptions): ScaffoldFile[] {
 `,
     },
     {
-      path: "src/bridge.ts",
-      content: `import { createNoodlrWebAppBridge } from "@noodlrstudio/plugin-sdk/web-app";
+      path: "src/main.ts",
+      content: `// An audiframe app: Noodlr Board's Web App node plays it from MIDI cables,
+// takes its notes out, mutes or suspends it, and saves its state with the
+// space. The same code works in any audiframe host.
+import { createClient } from "@audiframe/client";
 
-export interface AppState {
+const APP_ID = ${JSON.stringify(options.id)};
+const SCHEMA_ID = \`\${APP_ID}.state\`;
+
+interface AppState {
   lastNote: number | null;
 }
+let state: AppState = { lastNote: null };
+const status = document.getElementById("status")!;
 
-export const state: AppState = { lastNote: null };
-
-export const bridge = createNoodlrWebAppBridge({
+const client = createClient({
   manifest: {
-    id: ${JSON.stringify(options.id)},
+    id: APP_ID,
     name: ${JSON.stringify(options.name)},
-    version: "0.1.0",
+    appVersion: "0.1.0",
+    protocolVersions: [{ major: 1, minor: 0 }],
+    capabilities: ["lifecycle", "state.snapshot", "midi.input", "midi.output"].map(
+      (id) => ({ id, version: 1 }),
+    ),
     ports: [
-      { id: "midi-in", label: "MIDI In", type: "midi", direction: "in" },
-      { id: "midi-out", label: "MIDI Out", type: "midi", direction: "out" },
+      { id: "midi-in", label: "MIDI In", direction: "in", type: "midi1" },
+      { id: "midi-out", label: "MIDI Out", direction: "out", type: "midi1" },
     ],
-    features: { runtimeControl: true, state: true },
+    stateSchemas: [
+      { schemaId: SCHEMA_ID, writableVersion: 1, readableVersions: [1] },
+    ],
   },
-  onMidiMessage: ({ data }) => {
-    const [status, note, velocity] = data;
-    if ((status & 0xf0) === 0x90 && velocity > 0) {
-      state.lastNote = note;
-      bridge.updateState({ ...state });
+  midi: (events) => {
+    for (const { data } of events) {
+      const [statusByte, note, velocity] = data;
+      if ((statusByte & 0xf0) === 0x90 && velocity > 0) {
+        state = { lastNote: note };
+        status.textContent = \`Last note in: \${note}\`;
+        client.markStateDirty();
+      }
     }
   },
-  onRestoreState: (restored) => {
-    if (restored && typeof restored === "object" && !Array.isArray(restored)) {
-      const note = (restored as Record<string, unknown>).lastNote;
-      state.lastNote = typeof note === "number" ? note : null;
-    }
+  lifecycle: ({ enabled, audible }) => {
+    status.textContent = enabled && audible ? "Connected" : "Muted by the board";
+    return "running";
   },
-  onAppearanceChange: ({ theme, tokens }) => {
-    document.documentElement.dataset.theme = theme;
-    for (const [name, value] of Object.entries(tokens)) {
-      document.documentElement.style.setProperty(\`--noodlr-\${name}\`, value);
-    }
+  onPanic: () => {
+    status.textContent = "All notes off";
+  },
+  state: {
+    get: () => ({
+      appId: APP_ID,
+      schemaId: SCHEMA_ID,
+      schemaVersion: 1,
+      data: { ...state },
+    }),
+    // Check what arrives before using it.
+    set: (snapshot) => {
+      const note = (snapshot.data as { lastNote?: unknown } | null)?.lastNote;
+      state = { lastNote: typeof note === "number" ? note : null };
+    },
   },
 });
 
-export function sendNote(note: number, velocity = 100) {
-  bridge.sendMidi("midi-out", [0x90, note, velocity]);
-  setTimeout(() => bridge.sendMidi("midi-out", [0x80, note, 0]), 250);
-}
+// Connect on load: the board offers a session for a few seconds. Outside a
+// host this does nothing.
+client.connect();
+
+document.getElementById("note")!.addEventListener("click", () => {
+  const send = (data: number[]) =>
+    client.sendMidi([{ id: crypto.randomUUID(), portId: "midi-out", data }]);
+  send([0x90, 60, 100]);
+  setTimeout(() => send([0x80, 60, 0]), 250);
+});
 `,
     },
     {
-      path: "src/main.ts",
-      content: `import { sendNote } from "./bridge";
-
-document.getElementById("status")!.textContent = "Connected when loaded in a Noodlr web app node.";
-document.getElementById("note")!.addEventListener("click", () => sendNote(60));
-`,
+      path: ".gitignore",
+      content: "node_modules\ndist\n",
     },
     {
       path: "README.md",
       content: `# ${options.name}
 
-A web app that connects to Noodlr Board through \`@noodlrstudio/plugin-sdk\`. It
-needs no review: host it anywhere and add it to a board as a web app node.
+A web app for Noodlr Board, built on the open
+[audiframe](https://github.com/noodlrstudio/audiframe) protocol. It needs no
+review: host it anywhere over HTTPS.
 
 \`\`\`sh
 npm install
 npm run dev
 \`\`\`
 
-The bridge carries MIDI and JSON state (at most 32 KB). It does not carry
-audio. See ${REPOSITORY_URL}.
+To use it on a board, add a **Web App** node and give it your app's address
+with \`?audiframe=1\` on the end, for example
+\`https://example.com/my-app/?audiframe=1\`. Noodlr only offers audiframe to
+URLs with that flag.
+
+Your app keeps its own UI and audio; the board sends it MIDI, takes its notes
+out, mutes or suspends it, and saves its state with the space. Audio does not
+cross the frame. See ${REPOSITORY_URL}.
 `,
     },
   ];

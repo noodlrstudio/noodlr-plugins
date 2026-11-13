@@ -41,7 +41,8 @@ in, normally your project.
 | `noodlr://docs/overview`                 | Plugin routes, when to use each, and the workflow     |
 | `noodlr://docs/design-rules`             | Theming, capability, state and lifecycle rules        |
 | `noodlr://docs/capabilities`             | Every capability and the context API behind it        |
-| `noodlr://docs/web-app-bridge`           | The web app bridge and the rules the host enforces    |
+| `noodlr://docs/web-apps`                 | Web apps on audiframe, and the earlier Noodlr bridge  |
+| `noodlr://schemas/audiframe/manifest`    | The audiframe client manifest schema                  |
 | `noodlr://docs/submitting`               | What a review pull request needs                      |
 | `noodlr://ui/components`                 | `@noodlrstudio/ui` Play node controls and their props |
 | `noodlr://theme/tokens`                  | The `--noodlr-*` tokens for Light and Dark            |
@@ -55,7 +56,8 @@ in, normally your project.
 | -------------------------------- | ------------------------------------------------------------------ |
 | `scaffold_plugin`                | Creates a Play node or web app bridge project                      |
 | `validate_play_node`             | Validates a manifest, state fields and ports, including defaults   |
-| `validate_web_app_manifest`      | Checks a bridge manifest the way the host does                     |
+| `validate_audiframe_manifest`    | Checks an audiframe manifest with audiframe's own validator        |
+| `validate_web_app_manifest`      | Checks a manifest for the earlier Noodlr bridge                    |
 | `validate_audio_plugin_manifest` | Validates a curated audio plugin manifest                          |
 | `check_capabilities`             | Compares declared capabilities with the context APIs the code uses |
 | `lint_theme`                     | Finds colour literals that should be `--noodlr-*` tokens           |
@@ -67,7 +69,7 @@ prompt to look.
 ### Prompts
 
 - `create-play-node`: build a Play node from an idea, end to end.
-- `connect-web-app`: add the bridge to an existing web app.
+- `connect-web-app`: make an existing web app playable in a Web App node with audiframe.
 - `prepare-for-review`: run every check and list what review still needs.
 
 ## Developing

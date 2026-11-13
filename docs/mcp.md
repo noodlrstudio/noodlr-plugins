@@ -74,7 +74,8 @@ Reference material the agent reads before writing code.
 | `noodlr://docs/overview`                 | The three plugin routes, when to use each, and the workflow |
 | `noodlr://docs/design-rules`             | Theming, capability, state and lifecycle rules              |
 | `noodlr://docs/capabilities`             | Every capability and the context API behind it              |
-| `noodlr://docs/web-app-bridge`           | The web app bridge and the limits the host enforces         |
+| `noodlr://docs/web-apps`                 | Web apps on audiframe, and the earlier Noodlr bridge        |
+| `noodlr://schemas/audiframe/manifest`    | The audiframe client manifest schema                        |
 | `noodlr://docs/submitting`               | What a review pull request needs                            |
 | `noodlr://ui/components`                 | `@noodlrstudio/ui` Play node controls and their props       |
 | `noodlr://theme/tokens`                  | The `--noodlr-*` tokens and their Light and Dark values     |
@@ -91,7 +92,8 @@ come from `@noodlrstudio/play-api`, so they always match the packages you instal
 | -------------------------------- | ----------------------------------------------------------------------------------- |
 | `scaffold_plugin`                | Creates a Play node or web app bridge project                                       |
 | `validate_play_node`             | Validates a manifest, state fields and ports, including that the defaults are valid |
-| `validate_web_app_manifest`      | Checks a web app bridge manifest the way the host does                              |
+| `validate_audiframe_manifest`    | Checks an audiframe manifest with audiframe's own validator                         |
+| `validate_web_app_manifest`      | Checks a manifest for the earlier Noodlr bridge                                     |
 | `validate_audio_plugin_manifest` | Validates a curated audio plugin manifest, including checksums and ports            |
 | `check_capabilities`             | Compares the capabilities you declare with the context APIs your code uses          |
 | `lint_theme`                     | Finds colour literals that should be `--noodlr-*` tokens                            |
@@ -108,7 +110,7 @@ Ready-made instructions you can start a task from.
 | Prompt               | Arguments    | What it asks the agent to do                     |
 | -------------------- | ------------ | ------------------------------------------------ |
 | `create-play-node`   | `idea`, `id` | Build a Play node from an idea, end to end       |
-| `connect-web-app`    | `id`         | Add the web app bridge to an existing web app    |
+| `connect-web-app`    | `id`         | Make an existing web app playable with audiframe |
 | `prepare-for-review` | `directory`  | Run every check and list what review still needs |
 
 ## Walkthrough: build a compressor
@@ -375,7 +377,21 @@ Test Files  1 passed (1)
      Tests  6 passed (6)
 ```
 
-### 9. Run it in the Mac app
+### 9. Preview it in a browser
+
+Every Play node scaffold has a preview page:
+
+```sh
+npm run dev
+```
+
+It mounts the node with the mock host context, the noodlr theme tokens and a
+real `AudioContext` for its audio ports. **Play test tone** feeds a tone into
+the audio inputs, so the compressor's gain-reduction meter moves and you hear
+it through the speakers; **Light / Dark** switches theme. There is no board,
+cables or other players: for those, run it in the Mac app.
+
+### 10. Run it in the Mac app
 
 Every Play node scaffold includes a build for the Noodlr Mac app's local
 plugins folder:
@@ -403,7 +419,7 @@ The bundle's default export is `{ definition, mount }`: the definition without
 its view, and a function that mounts the view into an element the host
 provides. `src/local-plugin.ts` in the scaffold does this for you.
 
-### 10. Prepare for review
+### 11. Prepare for review
 
 The `prepare-for-review` prompt runs every check again and lists what a review
 pull request still needs, such as a licence file. See

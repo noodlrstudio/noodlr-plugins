@@ -6,8 +6,23 @@ here.
 
 ## Unreleased
 
-- `@noodlrstudio/mcp`: `bin` points at `dist/bin.js` (no `./`), which npm
-  normalizes to anyway; it stops a misleading publish warning.
+- `@noodlrstudio/mcp` 0.2.0:
+  - **Web apps use audiframe.** The `web-app` scaffold, the `connect-web-app`
+    prompt and the `noodlr://docs/web-apps` guide (replacing
+    `noodlr://docs/web-app-bridge`) use `@audiframe/client`, pinned to
+    `0.1.0-alpha.2`, matching noodlr.xyz/developers. New tool
+    `validate_audiframe_manifest` and resource
+    `noodlr://schemas/audiframe/manifest`. `validate_web_app_manifest` stays,
+    for apps on the earlier `@noodlrstudio/plugin-sdk` bridge.
+  - **Browser preview.** Play node scaffolds include `index.html` and
+    `src/preview.ts`: `npm run dev` shows the node with the mock host, the
+    theme tokens, a Light / Dark switch and real Web Audio for audio ports,
+    with a test tone.
+  - `bin` points at `dist/bin.js` (no `./`), which npm normalizes to anyway; it
+    stops a misleading publish warning.
+- The starter and the compressor example have the same browser preview.
+- The README covers installing from npm, developer access (with an issue form)
+  and the current roadmap.
 
 ## 2026-11-12: first npm release
 

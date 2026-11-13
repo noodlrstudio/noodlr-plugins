@@ -33,6 +33,9 @@ LOCAL_ONLY=(
   packages/ui/svelte.config.js
   packages/ui/tsconfig.json
   examples/compressor-play-node
+  examples/play-node-starter/README.md
+  examples/play-node-starter/index.html
+  examples/play-node-starter/src/preview.ts
 )
 
 # The monorepo's workspace packages are @noodlr/*; they are published from
@@ -98,6 +101,10 @@ for path in "${SYNC_PATHS[@]}"; do
     fi
   done < <(find "$staging/$path" -name package.json -not -path '*/node_modules/*')
 done
+
+# The monorepo's Prettier version formats some code differently, so format
+# what came in with this repo's, or CI's `prettier --check` fails after a sync.
+(cd "$dest_root" && npx --no-install prettier --write --log-level warn "${SYNC_PATHS[@]}")
 
 printf '%s\n' "$source_sha" > "$dest_root/UPSTREAM"
 echo "synced from $source_sha"
