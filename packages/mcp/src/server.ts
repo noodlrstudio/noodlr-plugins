@@ -36,7 +36,7 @@ import {
 } from "./templates.js";
 
 export const SERVER_NAME = "noodlr";
-export const SERVER_VERSION = "0.2.0";
+export const SERVER_VERSION = "0.2.1";
 
 export interface NoodlrMcpServerOptions {
   /** Directory that relative paths in tool arguments resolve against. */

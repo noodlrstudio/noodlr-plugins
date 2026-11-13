@@ -176,7 +176,7 @@ describe("noodlr MCP server", () => {
 
     const web = await client.readResource({ uri: "noodlr://docs/web-apps" });
     const [content] = web.contents as Array<{ text: string }>;
-    expect(content.text).toContain("@audiframe/client@0.1.0-alpha.2");
+    expect(content.text).toContain("@audiframe/client@0.1.0-alpha.3");
     expect(content.text).toContain("?audiframe=1");
   });
 

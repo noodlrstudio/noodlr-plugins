@@ -168,7 +168,7 @@ describe("scaffold", () => {
     const pkg = JSON.parse(
       files.find((file) => file.path === "package.json")!.content,
     );
-    expect(pkg.dependencies).toEqual({ "@audiframe/client": "0.1.0-alpha.2" });
+    expect(pkg.dependencies).toEqual({ "@audiframe/client": "0.1.0-alpha.3" });
     expect(files.find((file) => file.path === "README.md")?.content).toContain(
       "?audiframe=1",
     );
