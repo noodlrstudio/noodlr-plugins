@@ -411,9 +411,15 @@ Svelte runtime and styles) and a `noodlr-plugin.json` descriptor. To run it:
 2. Turn on **Developer › Load Local Plugins**.
 3. Choose **Developer › Open Node Lab**. The node is put on the stage and
    listed under **Local plugins**. If it can't load, the reason is shown there.
+4. To play it with other nodes, choose **Developer › Open Local Room** (Mac
+   app 1.0.8 or later) and press Tab. It's listed as **Local · unreviewed**.
 
-Local plugins are unreviewed and run with the board's access, so they only
-load in Node Lab. Rebuild and reopen Node Lab after each change.
+Local plugins are unreviewed and run with the board's access, so they need
+[developer access](https://github.com/noodlrstudio/noodlr-plugins#developer-access)
+and only load in Node Lab and local Rooms, which stay on your Mac. They never
+appear in a shared Space, and a local Room can't be saved to noodlr while it
+has a local node. After each change, rebuild, copy the folder again and reopen
+Node Lab or the Room.
 
 The bundle's default export is `{ definition, mount }`: the definition without
 its view, and a function that mounts the view into an element the host
