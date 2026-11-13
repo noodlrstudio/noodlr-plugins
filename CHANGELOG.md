@@ -6,8 +6,16 @@ here.
 
 ## Unreleased
 
-- Repository scaffolded. Packages are being moved here from the main Noodlr
-  codebase and are not on npm yet.
+- `@noodlrstudio/mcp`: `bin` points at `dist/bin.js` (no `./`), which npm
+  normalizes to anyway; it stops a misleading publish warning.
+
+## 2026-11-12: first npm release
+
+Published as `@noodlrstudio/play-api` 0.3.0, `@noodlrstudio/ui` 0.1.0,
+`@noodlrstudio/plugin-sdk` 0.1.0 and `@noodlrstudio/mcp` 0.1.0. The `@noodlr`
+npm scope belongs to someone else, so the packages use `@noodlrstudio`.
+
+- Repository scaffolded. Packages moved here from the main Noodlr codebase.
 - Add `@noodlrstudio/mcp`, a local MCP server for building plugins with coding
   agents: docs, schemas, UI catalogue and theme tokens as resources; scaffold,
   validate, capability and theme checks as tools.
