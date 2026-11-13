@@ -118,7 +118,7 @@ the board plays it from its MIDI cables, takes its notes out, mutes or suspends
 it, and saves its state with the space.
 
 ```ts
-// npm install --save-exact @audiframe/client@0.1.0-alpha.2
+// npm install --save-exact @audiframe/client@0.1.0-alpha.3
 import { createClient } from "@audiframe/client";
 
 const client = createClient({

@@ -6,6 +6,12 @@ here.
 
 ## Unreleased
 
+- `@noodlrstudio/mcp` 0.2.1: uses `@audiframe/protocol` 0.1.0-alpha.3, whose
+  type declarations now work with NodeNext, so its workaround is gone; the
+  `web-app` scaffold and docs pin `@audiframe/client` 0.1.0-alpha.3.
+
+## 2026-11-13: `@noodlrstudio/mcp` 0.2.0
+
 - `@noodlrstudio/mcp` 0.2.0:
   - **Web apps use audiframe.** The `web-app` scaffold, the `connect-web-app`
     prompt and the `noodlr://docs/web-apps` guide (replacing

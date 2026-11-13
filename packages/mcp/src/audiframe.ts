@@ -1,15 +1,11 @@
-import * as protocol from "@audiframe/protocol";
+import {
+  manifestSchema,
+  validateManifest,
+  type Manifest,
+} from "@audiframe/protocol";
 
 /** The @audiframe/client version the docs and scaffold pin to. */
-export const AUDIFRAME_CLIENT_VERSION = "0.1.0-alpha.2";
-
-// @audiframe/protocol 0.1.0-alpha.2's type declarations re-export with
-// extensionless paths, which NodeNext resolution can't follow, so its exports
-// are typed here. The JavaScript exports exist; the tests exercise both.
-const { manifestSchema, validateManifest } = protocol as unknown as {
-  manifestSchema: Record<string, unknown>;
-  validateManifest(manifest: unknown): void;
-};
+export const AUDIFRAME_CLIENT_VERSION = "0.1.0-alpha.3";
 
 export { manifestSchema as audiframeManifestSchema };
 
@@ -88,7 +84,8 @@ export function checkAudiframeManifest(manifest: unknown): {
   }
 
   try {
-    validateManifest(manifest);
+    // audiframe's validator is the authority on the shape.
+    validateManifest(manifest as unknown as Manifest);
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     if (!issues.length) {
