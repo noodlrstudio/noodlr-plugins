@@ -16,7 +16,9 @@ The walkthrough in [docs/mcp.md](../../docs/mcp.md) shows each step.
 
 ```sh
 npm install
-npm run validate
+npm run dev          # preview in a browser; "Play test tone" drives the meter
+npm run validate     # type-check and test
+npm run build:local  # bundle for the noodlr Mac app's local plugins folder
 ```
 
 Play nodes are reviewed before they ship. See

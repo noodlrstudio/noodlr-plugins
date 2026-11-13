@@ -1,58 +1,23 @@
 # Play node starter
 
-Copy this directory into a reviewed development workspace, replace the
-reverse-domain ID, and add the resulting definition to Noodlr's trusted
-allowlist during review.
+A minimal Play node with shared state, theming and the space's transport.
+Copy this folder, change the reverse-domain id in `src/index.ts` (for example
+`com.yourname.my-node`), and build from there.
 
 ```sh
 npm install
-npm run dev
-npm test
-npm run validate
+npm run dev       # preview in a browser, with a mock host
+npm run validate  # type-check and test
 ```
 
-There is intentionally no publishing command in API v0.
+`npm run dev` shows the node with the mock host context from
+`@noodlrstudio/play-api`, the noodlr theme tokens and a Light / Dark switch.
 
-## Light and Dark
+To play a node inside noodlr (in the Mac app's Node Lab or a local Room), it
+needs a bundle for the local plugins folder. Projects created with
+[`@noodlrstudio/mcp`](../../packages/mcp)'s `scaffold_plugin` include that
+build (`npm run build:local`); see
+[`examples/compressor-play-node`](../compressor-play-node) for one. Loading it
+needs [developer access](../../README.md#developer-access).
 
-Noodlr's Play room has a Light and a Dark theme, and users switch between them
-with the Sun/Moon toggle in the board header. The starter node supports both
-without any theme code:
-
-- Controls from `@noodlrstudio/ui/play-node` (`NodeSurface`, `Button`, `Knob` and the
-  rest) follow the host theme automatically.
-- Style your own elements with the `--noodlr-*` tokens, for example
-  `color: var(--noodlr-text-secondary)`. Never write colour literals such as
-  `#151518` or `rgba(...)`; they will be wrong in one of the two themes, and
-  allowlist review rejects them.
-- Read `context.appearance` only when you draw on a `<canvas>`, where CSS
-  cannot reach.
-- Use the Light/Dark toggle in Node Lab to check your node in both themes.
-
-See "Appearance and theming" in `docs/play-api/api-reference.md` for the token
-list.
-
-## Staying in time
-
-Every space has one shared tempo, and every client in a live room hears the
-same beat at the same moment. A node that declares `transport.read` can read
-it:
-
-- `context.transport.snapshot()` reports `state`, `bpm` and `beat`. While the
-  space clock is stopped, `state` is `"stopped"` and `bpm` is still the space's
-  tempo.
-- `context.transport.timeOfBeat(beat)` gives the time in seconds, on the
-  `context.transport.now()` timebase, at which the clock reaches a beat, and
-  `beatAt(seconds)` goes the other way. Both return `null` while the clock is
-  stopped.
-- `context.transport.schedule(callback, { quantizeBeats: 1 })` waits for the
-  next beat line of the space clock rather than a grid of its own. Use
-  `quantizeBeats: 4` for the next bar line.
-
-A node that keeps time itself, such as a drum machine, declares `clock.follow`
-as well and gets `context.clock`. It can start the clock, tell it when the node
-is running with `clock.running(true)`, and offer a follow-the-space choice with
-`clock.setFollow` and `clock.setOwnBpm`. Both are undoable edits for editors
-and do nothing for commenters and viewers (check `clock.snapshot().canEdit`).
-In tests, `createMockPlayNodeContext` gives you a stopped 120 BPM clock that
-`setClock` drives.
+The Play API is at version `0`: expect breaking changes before 1.0.

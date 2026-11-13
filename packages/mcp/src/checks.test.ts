@@ -155,13 +155,22 @@ describe("scaffold", () => {
     expect(file("README.md")).toContain("Developer › Open Node Lab");
   });
 
-  it("creates a web app bridge project", () => {
+  it("creates a web app on audiframe, pinned to the exact client version", () => {
     const files = scaffoldFiles({
       route: "web-app",
       id: "com.example.harmoniser",
       name: "Harmoniser",
     });
-    const bridge = files.find((file) => file.path === "src/bridge.ts");
-    expect(bridge?.content).toContain('"com.example.harmoniser"');
+    const main = files.find((file) => file.path === "src/main.ts");
+    expect(main?.content).toContain('from "@audiframe/client"');
+    expect(main?.content).toContain('const APP_ID = "com.example.harmoniser"');
+    expect(main?.content).not.toContain("plugin-sdk");
+    const pkg = JSON.parse(
+      files.find((file) => file.path === "package.json")!.content,
+    );
+    expect(pkg.dependencies).toEqual({ "@audiframe/client": "0.1.0-alpha.2" });
+    expect(files.find((file) => file.path === "README.md")?.content).toContain(
+      "?audiframe=1",
+    );
   });
 });

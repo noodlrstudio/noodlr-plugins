@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Building plugins with a coding agent
+    url: https://github.com/noodlrstudio/noodlr-plugins/blob/main/docs/mcp.md
+    about: Setup, tools and a full walkthrough with the noodlr MCP server.
+  - name: noodlr developer docs
+    url: https://noodlr.xyz/developers/
+    about: Plugin routes, audiframe web apps, audio plugins and WCLAP.

@@ -20,8 +20,13 @@ import {
   submittingMarkdown,
   themeTokensMarkdown,
   uiComponentsMarkdown,
-  webAppBridgeMarkdown,
+  webAppMarkdown,
 } from "./knowledge.js";
+import {
+  AUDIFRAME_CLIENT_VERSION,
+  audiframeManifestSchema,
+  checkAudiframeManifest,
+} from "./audiframe.js";
 import { readSourceFiles } from "./source-files.js";
 import { lintTheme } from "./theme-lint.js";
 import {
@@ -31,7 +36,7 @@ import {
 } from "./templates.js";
 
 export const SERVER_NAME = "noodlr";
-export const SERVER_VERSION = "0.1.0";
+export const SERVER_VERSION = "0.2.0";
 
 export interface NoodlrMcpServerOptions {
   /** Directory that relative paths in tool arguments resolve against. */
@@ -80,7 +85,7 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
     { name: SERVER_NAME, version: SERVER_VERSION },
     {
       instructions:
-        "Tools and reference for building Noodlr Board plugins: Play nodes (Svelte + @noodlrstudio/play-api), web app bridge plugins (@noodlrstudio/plugin-sdk) and audio plugins (WAM 2, Cmajor, WCLAP). Read noodlr://docs/overview first. After editing a Play node, run validate_play_node, check_capabilities and lint_theme.",
+        "Tools and reference for building Noodlr Board plugins: Play nodes (Svelte + @noodlrstudio/play-api), web apps (the open audiframe protocol, @audiframe/client) and audio plugins (WAM 2, Cmajor, WCLAP). Read noodlr://docs/overview first. After editing a Play node, run validate_play_node, check_capabilities and lint_theme.",
     },
   );
 
@@ -160,11 +165,18 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
     () => themeTokensMarkdown(renderPlayAppearanceCss()),
   );
   markdown(
-    "web-app-bridge",
-    "noodlr://docs/web-app-bridge",
-    "Web app bridge",
-    "Connecting a hosted web app with @noodlrstudio/plugin-sdk/web-app.",
-    webAppBridgeMarkdown,
+    "web-apps",
+    "noodlr://docs/web-apps",
+    "Web apps (audiframe)",
+    "Connecting a hosted web app to a Web App node with @audiframe/client.",
+    webAppMarkdown,
+  );
+  jsonResource(
+    "audiframe-manifest-schema",
+    "noodlr://schemas/audiframe/manifest",
+    "audiframe manifest schema",
+    `The manifest schema from @audiframe/protocol ${AUDIFRAME_CLIENT_VERSION}.`,
+    () => audiframeManifestSchema,
   );
   markdown(
     "submitting",
@@ -291,11 +303,25 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
   );
 
   server.registerTool(
+    "validate_audiframe_manifest",
+    {
+      title: "Validate an audiframe manifest",
+      description:
+        "Check the manifest passed to createClient from @audiframe/client, using audiframe's own validator, and explain what is wrong. This is the route for new web apps.",
+      inputSchema: { manifest: jsonObject },
+    },
+    async ({ manifest }) => {
+      const checked = checkAudiframeManifest(manifest);
+      return result(checked, !checked.valid);
+    },
+  );
+
+  server.registerTool(
     "validate_web_app_manifest",
     {
-      title: "Validate a web app bridge manifest",
+      title: "Validate a legacy Noodlr bridge manifest",
       description:
-        "Check a manifest for createNoodlrWebAppBridge the way the host does. Returns the manifest as the host will see it.",
+        "For apps on the earlier @noodlrstudio/plugin-sdk bridge (createNoodlrWebAppBridge) only; new web apps use audiframe and validate_audiframe_manifest. Returns the manifest as the host will see it.",
       inputSchema: { manifest: jsonObject },
     },
     async ({ manifest }) => {
@@ -305,7 +331,7 @@ export function createNoodlrMcpServer(options: NoodlrMcpServerOptions = {}) {
           {
             valid: false,
             message:
-              "The host will reject this manifest. Read noodlr://docs/web-app-bridge for the rules: reverse-domain id, semver version, name up to 80 characters, at most 8 unique MIDI ports with direction in or out.",
+              "The host will reject this manifest. Rules: reverse-domain id, semver version, name up to 80 characters, at most 8 unique MIDI ports with direction in or out. New web apps should use audiframe instead (noodlr://docs/web-apps).",
           },
           true,
         );
@@ -445,7 +471,8 @@ ${localPluginSteps(id ?? "<id>")}`,
     "connect-web-app",
     {
       title: "Connect a web app to Noodlr",
-      description: "Add the web app bridge to an existing web app.",
+      description:
+        "Make an existing web app playable in a Noodlr Web App node with audiframe.",
       argsSchema: {
         id: z.string().optional().describe("Reverse-domain id"),
       },
@@ -456,15 +483,17 @@ ${localPluginSteps(id ?? "<id>")}`,
           role: "user",
           content: {
             type: "text",
-            text: `Connect this web app to Noodlr Board with the web app bridge.
+            text: `Connect this web app to Noodlr Board with the open audiframe protocol.
 
-1. Read noodlr://docs/web-app-bridge.
-2. Add @noodlrstudio/plugin-sdk and create the bridge once at start-up${id ? ` with id "${id}"` : ""}. Declare only the MIDI ports the app needs.
-3. Route incoming MIDI to the app, send its MIDI out with bridge.sendMidi, and save restorable state with bridge.updateState (JSON, at most 32 KB).
-4. Apply onAppearanceChange tokens so the app matches the host theme.
-5. Run validate_web_app_manifest on the manifest.
+1. Read noodlr://docs/web-apps.
+2. Add the exact version: npm install --save-exact @audiframe/client@${AUDIFRAME_CLIENT_VERSION}
+3. Create the client once at start-up with createClient${id ? `, with manifest id "${id}"` : ""}. Declare only the capabilities and MIDI ports the app implements; "lifecycle" is required.
+4. Route incoming MIDI to the app, send its MIDI out with client.sendMidi, follow lifecycle (enabled/audible) and onPanic, and save restorable state through state.get/state.set, calling client.markStateDirty when it changes. Check incoming state before applying it.
+5. Call client.connect() on load.
+6. Run validate_audiframe_manifest on the manifest.
+7. Tell the developer to share the app's URL with ?audiframe=1 on the end; Noodlr only offers audiframe to URLs with that flag.
 
-The bridge does not carry audio. If the app needs Noodlr's audio, say so and suggest a Play node or an audio plugin instead.`,
+Audio stays inside the app; it does not cross the frame. If the app needs Noodlr's audio graph, say so and suggest a Play node or an audio plugin instead.`,
           },
         },
       ],

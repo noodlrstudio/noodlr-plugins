@@ -5,6 +5,7 @@ import {
   PLAY_NODE_ICON_TOKENS,
   type PlayNodeCapability,
 } from "@noodlrstudio/play-api";
+import { AUDIFRAME_CLIENT_VERSION } from "./audiframe.js";
 import { UI_COMPONENTS } from "./generated/ui-catalogue.js";
 
 export const REPOSITORY_URL = "https://github.com/noodlrstudio/noodlr-plugins";
@@ -139,13 +140,13 @@ Source, starters and docs: ${REPOSITORY_URL}
 
 | Route | You write | You get | Review |
 | --- | --- | --- | --- |
-| Web app bridge | Any hosted web app plus \`@noodlrstudio/plugin-sdk/web-app\` | MIDI in and out, runtime state, JSON state saved with the board, inside an iframe node | No |
+| Web app | Any hosted web app plus the open [audiframe](https://github.com/noodlrstudio/audiframe) client, \`@audiframe/client\` | MIDI in and out, mute and suspend, state saved with the board, inside a Web App node | No |
 | Play node | A Svelte 5 component plus a \`definePlayNode\` definition from \`@noodlrstudio/play-api\` | The full host API: audio and MIDI ports, transport, shared collaborative state, assets, mixer | Yes |
 | Audio plugin | A WAM 2, Cmajor or WCLAP (CLAP built to WebAssembly) bundle | Real graph audio and MIDI inside Noodlr's AudioContext | Yes |
 
-Start with the web app bridge if you already have a site. Move to a Play node
-when you need audio ports, transport sync or shared state. The bridge carries
-MIDI and JSON only; it never carries audio across the iframe.
+Start with a web app if you already have a site. Move to a Play node when you
+need audio ports, transport sync or shared state. A web app keeps its own
+audio: only MIDI, lifecycle and state cross the frame.
 
 ## Workflow with this server
 
@@ -242,39 +243,75 @@ ${css}
 `;
 }
 
-export function webAppBridgeMarkdown() {
-  return `# Web app bridge
+export function webAppMarkdown() {
+  return `# Web apps (audiframe)
 
-\`@noodlrstudio/plugin-sdk/web-app\` connects a web app you host to a Noodlr iframe
-node. No review is needed.
+A Web App node runs any app you host, over the open
+[audiframe](https://github.com/noodlrstudio/audiframe) protocol. No review is
+needed. The board plays your app from its MIDI cables, takes its notes out,
+mutes or suspends it, and saves its state with the space. The same code works
+in any audiframe host.
 
 \`\`\`ts
-import { createNoodlrWebAppBridge } from "@noodlrstudio/plugin-sdk/web-app";
+// npm install --save-exact @audiframe/client@${AUDIFRAME_CLIENT_VERSION}
+import { createClient } from "@audiframe/client";
 
-const bridge = createNoodlrWebAppBridge({
+const APP_ID = "com.example.drum-machine";
+const SCHEMA_ID = \`\${APP_ID}.project\`;
+
+const client = createClient({
   manifest: {
-    id: "com.example.my-app",
-    name: "My App",
-    version: "1.0.0",
+    id: APP_ID,
+    name: "Drum Machine",
+    appVersion: "1.0.0",
+    protocolVersions: [{ major: 1, minor: 0 }],
+    capabilities: ["lifecycle", "state.snapshot", "midi.input", "midi.output"]
+      .map((id) => ({ id, version: 1 })),
     ports: [
-      { id: "midi-in", label: "MIDI In", type: "midi", direction: "in" },
-      { id: "midi-out", label: "MIDI Out", type: "midi", direction: "out" },
+      { id: "midi-in", label: "MIDI In", direction: "in", type: "midi1" },
+      { id: "midi-out", label: "MIDI Out", direction: "out", type: "midi1" },
     ],
-    features: { runtimeControl: true, state: true },
+    stateSchemas: [
+      { schemaId: SCHEMA_ID, writableVersion: 1, readableVersions: [1] },
+    ],
   },
-  onMidiMessage: ({ portId, data }) => handleMidi(portId, data),
-  onRestoreState: (state) => restore(state),
+  midi: (events) => events.forEach(({ data }) => receiveMidi(data)),
+  lifecycle: ({ enabled, audible }) => {
+    setMuted(!enabled || !audible);
+    return audioIsRunning() ? "running" : "locked";
+  },
+  onPanic: () => releaseAllNotes(),
+  state: {
+    get: () => ({ appId: APP_ID, schemaId: SCHEMA_ID, schemaVersion: 1, data: saveProject() }),
+    set: (snapshot) => loadProject(validateProject(snapshot.data)),
+  },
 });
+
+client.connect(); // on load: the board offers a session for a few seconds
 \`\`\`
 
-Rules the host enforces:
+Before you share it:
 
-- \`id\` is reverse-domain, \`version\` is semver, \`name\` is at most 80 characters.
-- At most 8 ports. Port ids are unique, \`type\` is \`"midi"\`, \`direction\` is
-  \`"in"\` or \`"out"\`, labels are at most 64 characters.
-- State is JSON and at most 32 KB.
-- MIDI is MIDI 1.0 short messages only.
-- No audio crosses the iframe. Use a Play node or an audio plugin for audio.
+- **Opt in with the URL.** Noodlr offers audiframe only when the app's address
+  ends in \`?audiframe=1\`, so share it with the flag.
+- **Connect on load,** before heavy start-up. Outside a host it does nothing.
+- **Hosting:** HTTPS, and allow framing (no \`X-Frame-Options\` or
+  \`frame-ancestors\` that blocks the board).
+- **Identity:** keep the app id and port ids stable; saved state and cables
+  depend on them.
+- **Capabilities:** list only what you implement, each as \`{ id, version: 1 }\`;
+  \`lifecycle\` is required. Check incoming state before applying it.
+- **Audio** stays inside your app and starts after a tap in your frame. Follow
+  the board's mute and suspend.
+- Pin the exact \`@audiframe/client\` version: audiframe is in alpha.
+
+Run \`validate_audiframe_manifest\` on your manifest.
+
+## The earlier Noodlr bridge
+
+Apps built on \`@noodlrstudio/plugin-sdk/web-app\` (\`createNoodlrWebAppBridge\`)
+keep working at their existing URLs; \`validate_web_app_manifest\` still checks
+those manifests. New apps should use audiframe.
 `;
 }
 
@@ -282,7 +319,7 @@ export function submittingMarkdown() {
   return `# Submitting a plugin for review
 
 Play nodes and audio plugins run inside the Noodlr page, so they are reviewed
-before they ship to cloud and Live Collaboration Spaces. Web app bridge plugins
+before they ship to cloud and Live Collaboration Spaces. Web apps
 need no review.
 
 Open a pull request on ${REPOSITORY_URL} that includes:
